@@ -10,6 +10,10 @@ def load_and_upload(model_name):
         return
     with open(filepath, "r") as f:
         data = json.load(f)
+    print(f"Loaded {model_name} results with {len(data)} samples.")
+    if len(data) != 1024:
+        print(f"Expected 1024 samples, got {len(data)}. Exit!")
+        return
     dataset = Dataset.from_list(data)
     dataset.push_to_hub(
         repo_id="WildEval/WildBench-Results",
@@ -27,8 +31,9 @@ python src/upload_results.py tulu-2-dpo-70b
 python src/upload_results.py gpt-3.5-turbo-0125
 python src/upload_results.py gpt-4-0125-preview
 
+python src/upload_results.py vicuna-13b-v1.5
 python src/upload_results.py Mixtral-8x7B-Instruct-v0.1
 python src/upload_results.py Mistral-7B-Instruct-v0.2
 python src/upload_results.py Yi-34B-Chat
-python src/upload_results.py vicuna-13b-v1.5
+
 """
