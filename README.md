@@ -7,6 +7,7 @@ A Dynamic Benchmark for Evaluating LLMs in the Wild
 ```bash
 conda create -n wildbench python=3.10
 conda activate wildbench
+pip install -r requirements.txt
 ```
 
 <!-- 
