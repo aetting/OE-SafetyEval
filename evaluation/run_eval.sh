@@ -31,4 +31,11 @@ wait
 # # Run the merge results script after all evaluation scripts have completed
 python src/merge_results.py $eval_folder $model_name
 
+# >>>> bash evaluation/run_eval.sh gpt-3.5-turbo-0125 <<<< the reference itself 
+
 # bash evaluation/run_eval.sh gpt-4-0125-preview
+# bash evaluation/run_eval.sh tulu-2-dpo-70b
+# bash evaluation/run_eval.sh Mixtral-8x7B-Instruct-v0.1
+# bash evaluation/run_eval.sh Mistral-7B-Instruct-v0.2
+# bash evaluation/run_eval.sh Yi-34B-Chat
+# bash evaluation/run_eval.sh vicuna-13b-v1.5

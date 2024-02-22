@@ -29,4 +29,8 @@ load_and_upload(sys.argv[3], sys.argv[1], sys.argv[2])
 """
 python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 gpt-4-0125-preview
 python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 tulu-2-dpo-70b
+python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Mixtral-8x7B-Instruct-v0.1
+python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Mistral-7B-Instruct-v0.2
+python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Yi-34B-Chat
+python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 vicuna-13b-v1.5
 """
