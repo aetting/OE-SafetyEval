@@ -24,9 +24,9 @@ def get_args():
     parser.add_argument("--action", type=str, default="trial", required=True)
     parser.add_argument("--mode", type=str, default="pairwise", required=True)
     parser.add_argument("--eval_template", type=str, default="", required=True)
-    parser.add_argument("--model_output_file", type=str, required=True) 
+    parser.add_argument("--target_model_name", type=str, required=True) 
     parser.add_argument("--data_name", type=str, default=None)
-    parser.add_argument("--ref_output_file", type=str, required=False)
+    parser.add_argument("--ref_model_name", type=str, required=False)
     parser.add_argument("--eval_output_file", type=str, required=True)
     parser.add_argument("--start_idx", type=int, default=0)
     parser.add_argument("--end_idx", type=int, default=-1)  
@@ -128,12 +128,8 @@ def gpt_eval(results, args):
     for ind, item in tqdm(enumerate(results), total=len(results), desc=f"Evaluating: {args.eval_output_file} "):
         computed = False
         if item["result"] != "N/A" or item.get("error", "N/A") != "N/A": 
-            results[ind]["parsed_result"] = parse_result(results[ind]["result"])
-            # print(f"Skipping {ind} for {args.eval_output_file}")
-            # skip the existing results
-            computed = True 
-        # if "error" in item and item["error"] != "N/A":
-        #     computed = True
+            results[ind]["parsed_result"] = parse_result(results[ind]["result"]) 
+            computed = True  
             
         openai_args["prompt"] = item["prompt"]
         # if True:
@@ -161,7 +157,6 @@ def gpt_eval(results, args):
             results[ind]["parsed_result"] = {"choice": "N/A"}
             results[ind]["price"] = {"cost": 0, "in_tokens": 0, "out_tokens": 0}
             pass 
-            
         
         # print("Done!") 
         if ind % args.save_interval == 0 or ind == len(results)-1:
@@ -181,99 +176,73 @@ def placeholder_generation(args):
     
     with open(args.eval_template) as f:
         eval_template = f.read() 
+        print(f"Loaded the eval_template from {args.eval_template}")
+    
     results = []
+    
 
-    if args.model_output_file:
-        with open(args.model_output_file.split("@")[0], 'r') as f:
-            data = json.load(f)
-            candidates = []
-            model_name = args.model_output_file.split("@")[1]
-            for _item in data:
-                model_index =  [x["name"] for x in _item["models"]].index(model_name)
-                _item_new = {"id": _item["session_id"], "instruction": _item["input"], 
-                            "output": _item["models"][model_index]["output"],
-                            "generator": model_name}
-                candidates.append(_item_new)
-    elif args.data_name:
-        if args.data_name.startswith("WildEval/WildBench-dev"):
-            if "@" in args.data_name:
-                data_name = args.data_name.split("@")[0]
-                config_name = args.data_name.split("@")[1]
-            else:
-                data_name = args.data_name
-                config_name = "default"
-            data = load_dataset(data_name, config_name, split="train")
-            candidates = [] 
-            for _item in data:
-                history = ""
-                for x in _item["conversation_input"][:-1]:
+        
+    if args.mode == "pairwise":
+        bench_data = load_dataset("WildEval/WildBench-dev", "final_1k", split="train")
+        target_model_data = load_dataset("WildEval/WildBench-Results", args.target_model_name, split="train")
+        ref_model_data = load_dataset("WildEval/WildBench-Results", args.ref_model_name, split="train")
+        histories = []
+        last_queries = []
+        checklists = []
+        for b, t, f in zip(bench_data, target_model_data, ref_model_data):
+            assert b["session_id"] == t["session_id"] == f["session_id"]
+            history = ""
+            checklist = b["checklist"]
+            if len(b["conversation_input"]) > 0: 
+                for x in b["conversation_input"][:-1]:
                     if x["role"] == "user":
                         history += "USER: " + x["content"] + "\n\n"
                     elif x["role"] == "assistant":
                         history += "ASSISTANT: " + x["content"] + "\n\n"
-                
-                _item_new = {"id": _item["session_id"], 
-                            "chat_history": history, 
-                            "instruction": _item["conversation_input"][-1]["content"], 
-                            "output": _item["references"]["gpt-4"],
-                            "generator": "gpt"}
-                candidates.append(_item_new)
-        elif args.data_name == "tatsu-lab/alpaca_eval":
-            data = load_dataset("tatsu-lab/alpaca_eval", "alpaca_eval", split="eval")
-            candidates = [] 
-            ex_index = 0 
-            for _item in data:
-                _item_new = {"id": ex_index,
-                            "instruction": _item["instruction"],
-                            "output": "N/A",
-                            "generator": "N/A"
-                }
-                ex_index += 1
-                candidates.append(_item_new)
-        
-    if args.mode == "pairwise":
-        with open(args.ref_output_file.split("@")[0], 'r') as f:
-            # references = json.load(f)  
-            data = json.load(f)
-            references = []
-            model_name = args.ref_output_file.split("@")[1]
-            for _item in data:
-                model_index =  [x["name"] for x in _item["models"]].index(model_name)
-                _item_new = {"id": _item["session_id"], "instruction": _item["input"], 
-                            "output": _item["models"][model_index]["output"],
-                            "generator": model_name}
-                references.append(_item_new)
+            last_query = b["conversation_input"][-1]["content"]
+            histories.append(history)
+            last_queries.append(last_query)
+            checklists.append(checklist)
     else:
-        references = candidates[:]
+        raise Exception(f"Unknown mode: {args.mode}")
+
+    print(f"len(target_model_data)={len(target_model_data)}")
+    print(f"len(ref_model_data)={len(ref_model_data)}")
+
+    candidates = list(target_model_data)
+    references = list(ref_model_data)    
     assert len(candidates) == len(references)
             
     L = len(candidates)
     if args.end_idx < 0 or args.end_idx > L:
         args.end_idx = L
-
+ 
     print(f"# examples in candidates: {len(candidates)}; We take {args.end_idx-args.start_idx} for evaluation.")
     candidates = candidates[args.start_idx:args.end_idx]
     references = references[args.start_idx:args.end_idx]
+    histories = histories[args.start_idx:args.end_idx]
+    last_queries = last_queries[args.start_idx:args.end_idx]
+    checklists = checklists[args.start_idx:args.end_idx] 
     
     results = []
-    for item, ref_item in zip(candidates, references):
-        instruction = item["instruction"] 
-    
+    for item, ref_item, history, last_query, checklist in zip(candidates, references, histories, last_queries, checklists):
+        # print(item, ref_item, history, last_query, checklist)
         o = item["output"][0] if type(item["output"]) == list else item["output"]
         r = ref_item["output"][0] if type(ref_item["output"]) == list else ref_item["output"]
         # random decide which is A and which is B 
         d = {}
-        d["id"] = item["id"]
-        d["input"] = instruction           
+        d["session_id"] = item["session_id"]
+        d["history"] = history
+        d["last_query"] = last_query
         d["model_output"] = item["output"]
-        d["generator"] = item["generator"]
+        d["generator"] = args.target_model_name
         if args.mode == "pairwise":
             d["ref_output"] =  r 
-            d["ref_generator"] = ref_item["generator"] 
+            d["ref_generator"] = args.ref_model_name 
         d["eval_config"] = {"mode": args.mode, "gpt": args.model, "max_words": args.max_words_to_eval}
         
         ## Prompt composition for pairwise evaluation
-        if args.mode == "pairwise":
+        if args.mode == "pairwise": 
             if random.random() < 0.5:
                 A = o
                 B = r
@@ -283,22 +252,21 @@ def placeholder_generation(args):
                 B = o
                 d["assignment"] = {"A": d["ref_generator"], "B": d["generator"]} 
             prompt = eval_template
-            prompt = prompt.replace("{$instruction}", shorten(instruction, args.max_words_to_eval))
+            prompt = prompt.replace("{$history}", shorten(history, args.max_words_to_eval))
+            prompt = prompt.replace("{$user_query}", shorten(last_query, args.max_words_to_eval))
             prompt = prompt.replace("{$candidate_A}", shorten(A, args.max_words_to_eval))
             prompt = prompt.replace("{$candidate_B}", shorten(B, args.max_words_to_eval))
-        elif args.mode == "ref_score" or args.mode == "score":
-            prompt = eval_template
-            prompt = prompt.replace("{$instruction}", instruction)
-            prompt = prompt.replace("{$reference}", r)
-            prompt = prompt.replace("{$candidate}", o)
-        elif args.mode == "tag":
-            prompt = eval_template
-            if "{$chat_history}" in eval_template:
-                prompt = prompt.replace("{$chat_history}", item["chat_history"])
-            prompt = prompt.replace("{$instruction}", instruction) 
-
+            prompt = prompt.replace("{$checklist}", json.dumps(checklist, indent=2), args.max_words_to_eval)
+        
         d["prompt"] = prompt
-        d["result"] = "N/A" 
+        if A.strip() == "" and B.strip() == "":
+            d["result"] = json.dumps({"reason": "Both responses are empty.", "choice": "tie"})
+        elif A.strip() == "":
+            d["result"] = json.dumps({"reason": "The response A is empty.", "choice": "B"})
+        elif B.strip() == "":
+            d["result"] = json.dumps({"reason": "The response B is empty.", "choice": "A"})
+        else:
+            d["result"] = "N/A" 
         results.append(d)
     return results 
 
