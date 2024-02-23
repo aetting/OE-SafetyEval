@@ -39,3 +39,7 @@ python src/merge_results.py $eval_folder $model_name
 # bash evaluation/run_eval.sh Mistral-7B-Instruct-v0.2
 # bash evaluation/run_eval.sh Yi-34B-Chat
 # bash evaluation/run_eval.sh vicuna-13b-v1.5
+# bash evaluation/run_eval.sh Llama-2-70b-chat-hf
+# bash evaluation/run_eval.sh Llama-2-13b-chat-hf
+# bash evaluation/run_eval.sh Llama-2-7b-chat-hf
+
