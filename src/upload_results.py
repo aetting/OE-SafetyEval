@@ -38,4 +38,5 @@ python src/upload_results.py Yi-34B-Chat
 
 python src/upload_results.py Mistral-7B-Instruct-v0.1
 python src/upload_results.py zephyr-7b-beta
+python src/upload_results.py gemma-7b-it
 """
