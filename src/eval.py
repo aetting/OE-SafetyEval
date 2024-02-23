@@ -183,7 +183,7 @@ def placeholder_generation(args):
 
         
     if args.mode == "pairwise":
-        bench_data = load_dataset("WildEval/WildBench-dev", "final_1k", split="train")
+        bench_data = load_dataset("WildEval/WildBench", split="test")
         target_model_data = load_dataset("WildEval/WildBench-Results", args.target_model_name, split="train")
         ref_model_data = load_dataset("WildEval/WildBench-Results", args.ref_model_name, split="train")
         histories = []

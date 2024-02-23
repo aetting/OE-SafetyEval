@@ -51,7 +51,7 @@ def load_eval_data(args, data_name=None, model_name=None):
     id_strs = []
     metadata = {}
     if data_name == "wild_bench":
-        dataset = load_dataset("WildEval/WildBench-dev", "final_1k", split="train")
+        dataset = load_dataset("WildEval/WildBench", split="test")
         metadata = {"session_id": [], "primary_tag": []}
     elif data_name == "alpaca_eval":
         dataset = load_dataset("tatsu-lab/alpaca_eval", "alpaca_eval", split="eval")
