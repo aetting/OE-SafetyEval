@@ -42,4 +42,5 @@ python src/merge_results.py $eval_folder $model_name
 # bash evaluation/run_eval.sh Llama-2-70b-chat-hf
 # bash evaluation/run_eval.sh Llama-2-13b-chat-hf
 # bash evaluation/run_eval.sh Llama-2-7b-chat-hf
+# bash evaluation/run_eval.sh Mistral-7B-Instruct-v0.1
 

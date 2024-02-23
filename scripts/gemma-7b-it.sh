@@ -1,5 +1,5 @@
-model_name="HuggingFaceH4/zephyr-7b-beta"
-model_pretty_name="zephyr-7b-beta"
+model_name="google/gemma-7b-it"
+model_pretty_name="gemma-7b-it"
 TEMP=0.7; TOP_P=1.0; MAX_TOKENS=2048; 
 batch_size=4;
 # gpu="0,1,2,3"; num_gpus=4; 

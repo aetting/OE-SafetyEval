@@ -9,7 +9,9 @@ from typing import List, Any, Dict, Union, Tuple
 
 
 def map_to_conv(model_name):
-    if "tulu" in model_name.lower():
+    if "gemma" in model_name.lower() and "-it" in model_name.lower():
+        conv = get_conv_template("gemma")
+    elif "tulu" in model_name.lower():
         conv = get_conv_template("tulu")
     elif "zephyr" in model_name.lower():
         conv = get_conv_template("zephyr")
@@ -1397,6 +1399,20 @@ register_conv_template(
         stop_str="</s>",
     )
 )  
+
+
+# Gemma
+# reference: https://huggingface.co/google/gemma-7b-it?text=%3Cstart_of_turn%3Euser%0AHow+does+the+brain+work%3F%3Cend_of_turn%3E%0A%3Cstart_of_turn%3Emodel
+register_conv_template(
+    Conversation(
+        name="gemma",
+        roles=("<start_of_turn>user", "<start_of_turn>model"),
+        sep_style=SeparatorStyle.CHATML,
+        sep="<end_of_turn>",
+        stop_str="<end_of_turn>",
+    )
+)
+
 
 if __name__ == "__main__": 
     

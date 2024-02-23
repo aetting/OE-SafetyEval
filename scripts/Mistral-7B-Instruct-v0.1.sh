@@ -1,12 +1,11 @@
-model_name="HuggingFaceH4/zephyr-7b-beta"
-model_pretty_name="zephyr-7b-beta"
+model_name="mistralai/Mistral-7B-Instruct-v0.1"
+model_pretty_name="Mistral-7B-Instruct-v0.1"
 TEMP=0.7; TOP_P=1.0; MAX_TOKENS=2048; 
 batch_size=4;
 # gpu="0,1,2,3"; num_gpus=4; 
 
 CACHE_DIR=${HF_HOME:-"default"}
-output_dir="result_dirs/wild_bench/"
-
+output_dir="/home/yuchenl/result_dirs/wild_bench/"
 
 # Data-parallellism
 start_gpu=0
@@ -15,7 +14,6 @@ n_shards=4
 shard_size=256
 shards_dir="${output_dir}/tmp_${model_pretty_name}"
 for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start_gpu; start += $shard_size, end += $shard_size, gpu++)); do
-
     CUDA_VISIBLE_DEVICES=$gpu \
     python src/unified_infer.py \
         --start_index $start --end_index $end \
@@ -26,7 +24,8 @@ for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start
         --dtype bfloat16 \
         --top_p $TOP_P --temperature $TEMP \
         --batch_size $batch_size --max_tokens $MAX_TOKENS \
-        --output_folder $shards_dir/ &
+        --output_folder $shards_dir/ \
+        --overwrite  &
 done 
 wait 
 python src/merge_results.py $shards_dir/ $model_pretty_name
