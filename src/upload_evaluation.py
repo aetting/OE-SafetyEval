@@ -33,4 +33,8 @@ python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Mistral-7B
 python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Mixtral-8x7B-Instruct-v0.1
 python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Yi-34B-Chat
 python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 vicuna-13b-v1.5
+
+python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Llama-2-70b-chat-hf
+# python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Llama-2-13b-chat-hf
+# python src/upload_evaluation.py gpt-4-0125-preview gpt-3.5-turbo-0125 Llama-2-7b-chat-hf
 """

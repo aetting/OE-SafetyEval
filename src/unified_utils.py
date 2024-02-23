@@ -11,30 +11,17 @@ from tenacity import (
  
 from datasets import load_dataset
 from tqdm import tqdm
-from fastchat_conversation import get_conv_template
+from fastchat_conversation import map_to_conv
 import json   
 
 def apply_template(chat_history, model_name):
     model_inputs = [] 
     for chats in tqdm(chat_history, desc="Applying template", disable=True):
-        if "tulu" in model_name.lower():
-            conv = get_conv_template("tulu")
-        elif "zephyr" in model_name.lower():
-            conv = get_conv_template("zephyr")
-        elif "llama-2" in model_name.lower():
-            conv = get_conv_template("llama-2")
-            conv.set_system_message("""You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.""")
-        elif "mixtral" in model_name.lower() or "mistral" in model_name.lower():
-            conv = get_conv_template("mistral")
-        elif "yi" in model_name.lower() and "chat" in model_name.lower():
-            conv = get_conv_template("Yi-34b-chat")
-        elif "vicuna" in model_name.lower():
-            conv = get_conv_template("vicuna_v1.1")
-        elif "gpt-" in model_name.lower():
-            model_inputs.append(chats[0])
+        if "gpt-" in model_name.lower():
+            model_inputs.append("n/a") # gpt-s will be handled by another method.
             continue
         else:
-            print("ERROR: model_name not supported")
+            conv = map_to_conv(model_name)
         for chat_id, chat in enumerate(chats):
             conv.append_message(conv.roles[chat_id%2], chat)
         conv.append_message(conv.roles[1], None)
