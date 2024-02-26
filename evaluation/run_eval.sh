@@ -1,5 +1,6 @@
 model_name=$1
-ref_name="gpt-3.5-turbo-0125"
+# by default use gpt-3.5-turbo-0125 as ref_name
+ref_name=${2:-"gpt-3.5-turbo-0125"}
 gpt_eval_name="gpt-4-0125-preview"
 # gpt_eval_name="gpt-3.5-turbo-0125"
 
@@ -30,7 +31,7 @@ wait
 
 # # Run the merge results script after all evaluation scripts have completed
 python src/merge_results.py $eval_folder $model_name
-
+python src/upload_evaluation.py $gpt_eval_name $ref_name $model_name
 # >>>> bash evaluation/run_eval.sh gpt-3.5-turbo-0125 <<<< the reference itself 
 
 # bash evaluation/run_eval.sh gpt-4-0125-preview
@@ -44,4 +45,8 @@ python src/merge_results.py $eval_folder $model_name
 # bash evaluation/run_eval.sh Llama-2-7b-chat-hf
 # bash evaluation/run_eval.sh Mistral-7B-Instruct-v0.1
 # bash evaluation/run_eval.sh gemma-7b-it
+# bash evaluation/run_eval.sh gemma-2b-it
 
+# bash evaluation/run_eval.sh tulu-2-dpo-70b gpt-4-0125-preview
+# bash evaluation/run_eval.sh Mixtral-8x7B-Instruct-v0.1 gpt-4-0125-preview
+# bash evaluation/run_eval.sh zephyr-7b-beta gpt-4-0125-preview
