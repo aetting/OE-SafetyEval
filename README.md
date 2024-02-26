@@ -30,7 +30,7 @@ You can take the files under `scripts` as a reference to add a new model to the 
 1. Create a script named "zephyr-7b-beta.py" under `scripts` folder.
 2. Copy and paste the most similar existing script file to it.  For example, `Mistral-7B-Instruct-v0.1.sh` is the most similar to `zephyr-7b-beta.py`.
 3. Change the `model_name` and `model_pretty_name` to `HuggingFaceH4/zephyr-7b-beta` and `zephyr-7b-beta` respectively. Make sure that `model_name` is the same as the model name in the Hugging Face model hub, and the `model_pretty_name` is the same as the script name without the `.py` extension.
-4. Specify the conversation template for this model by modifying the code in ``.
+4. Specify the conversation template for this model by modifying the code in `src/fastchat_conversation.py`.
 5. Run your script to make sure it works. You can run the script by running `bash scripts/zephyr-7b-beta.sh` in the root folder.
 
 ### 2. Models that are only supported by native Hugging Face API
