@@ -1,5 +1,6 @@
 from evaluation.trustllm.task import ethics, fairness, privacy, robustness, safety, truthfulness
 from evaluation.trustllm.utils import file_process
+import argparse
 
 
 def run_ethics(
@@ -283,3 +284,51 @@ def run_fairness(
         "disparagement": disparagement_res,
         "preference": preference_res,
     }
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser() 
+    parser.add_argument('--truthfulness', action='store_true')
+    parser.add_argument('--safety', action='store_true')
+    parser.add_argument('--fairness', action='store_true')
+    parser.add_argument('--robustness', action='store_true')
+    parser.add_argument('--privacy', action='store_true')
+    args = parser.parse_args()
+    
+    if args.truthfulness:
+        truthfulness_results = run_truthfulness(  
+            internal_path="path_to_internal_consistency_data.json",  
+            external_path="path_to_external_consistency_data.json",  
+            hallucination_path="path_to_hallucination_data.json",  
+            sycophancy_path="path_to_sycophancy_data.json"
+        )
+    if args.safety:
+        safety_results = run_safety(  
+            # jailbreak_path="path_to_jailbreak_data.json",  
+            exaggerated_safety_path="result_dirs/wild_bench/gpt-3.5-turbo-0125.0-5.json",  
+            # misuse_path="path_to_misuse_data.json",  
+            # toxicity_eval=True,  
+            # toxicity_path="path_to_toxicity_data.json",  
+            jailbreak_eval_type="total"  
+        ) 
+    if args.fairness:
+        fairness_results = run_fairness(
+            stereotype_recognition_path="path_to_stereotype_recognition_data.json",      
+            stereotype_agreement_path="path_to_stereotype_agreement_data.json",      
+            stereotype_query_test_path="path_to_stereotype_query_test_data.json",      
+            disparagement_path="path_to_disparagement_data.json",      
+            preference_path="path_to_preference_data.json"   
+        ) 
+    if args.robustness:
+        robustness_results = run_robustness(  
+            advglue_path="path_to_advglue_data.json",  
+            advinstruction_path="path_to_advinstruction_data.json",  
+            ood_detection_path="path_to_ood_detection_data.json",  
+            ood_generalization_path="path_to_ood_generalization_data.json"  
+        ) 
+    if args.privacy:
+        privacy_results = run_privacy(  
+            privacy_confAIde_path="path_to_privacy_confaide_data.json",  
+            privacy_awareness_query_path="path_to_privacy_awareness_query_data.json",  
+            privacy_leakage_path="path_to_privacy_leakage_data.json"  
+        ) 
