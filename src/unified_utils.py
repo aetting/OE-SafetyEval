@@ -55,6 +55,9 @@ def load_eval_data(args, data_name=None, model_name=None):
             id_to_turn1_result = {}
             for item in mt_turn1_result:
                 id_to_turn1_result[item["question_id"]] = item["turn1_output"] 
+    elif args.data_file:
+        dataset = load_dataset("json",data_files=args.data_file,split="train")
+
     else:
         raise ValueError(f"Data name {data_name} not supported")
     
@@ -79,6 +82,8 @@ def load_eval_data(args, data_name=None, model_name=None):
                                      item["turns"][1]]) 
             else:
                 raise ValueError(f"mt_turn {args.mt_turn} not supported; must be 1 or 2")
+        elif args.data_file:
+            chat_history.append([item["prompt"]])
         else:
             raise ValueError(f"Data name {data_name} not supported")
         for key in metadata: 
@@ -158,6 +163,21 @@ def save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, f
                 "max_tokens": args.max_tokens,
             }
             formatted_outputs.append(output_item)
+    elif args.data_file:
+        for ind in range(len(outputs)):
+            output_item = {}
+            output_item["prompt"] = chat_history[ind]
+            output_item["res"] = outputs[ind]
+            output_item["generator"] = args.model_name
+            output_item["configs"] = {
+                "engine": args.engine,
+                "repetition_penalty": args.repetition_penalty,
+                "temperature": args.temperature,
+                "top_p": args.top_p,
+                "max_tokens": args.max_tokens,
+            }
+            formatted_outputs.append(output_item)
+            # import pdb; pdb.set_trace()
     with open(filepath, "w") as f:
         json.dump(formatted_outputs, f, indent=2)
         

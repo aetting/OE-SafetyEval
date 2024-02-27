@@ -21,7 +21,8 @@ def parse_args():
     parser.add_argument('--tensor_parallel_size', type=int, default=1)
     parser.add_argument('--dtype', type=str, default="auto")
     parser.add_argument('--tokenizer_mode', type=str, default="auto") 
-    parser.add_argument('--data_name', default="wild_bench", type=str)  
+    parser.add_argument('--data_name', default="wild_bench", type=str)
+    parser.add_argument('--data_file', default=None, type=str)  
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--num_outputs', default=1, type=int)
     parser.add_argument('--top_p',default=1, type=float)
@@ -114,6 +115,8 @@ if __name__ == "__main__":
     
     
     todo_inputs = model_inputs[num_skipped:]
+
+    # import pdb; pdb.set_trace()
     
     if args.engine == "vllm": 
         sampling_params = SamplingParams(top_p=args.top_p, temperature=args.temperature, repetition_penalty=args.repetition_penalty, max_tokens=args.max_tokens, 
@@ -144,7 +147,7 @@ if __name__ == "__main__":
         
     elif args.engine == "openai":        
         todo_chats = chat_history[num_skipped:]
-        @retry_handler(retry_limit=10)
+        @retry_handler(retry_limit=1)
         def api(**kwargs):
             result = openai_chat_request(**kwargs) 
             return result
@@ -158,6 +161,7 @@ if __name__ == "__main__":
                     openai_msg.append({"role":"user","content": chat_item})
                 else:
                     openai_msg.append({"role":"assistant","content": chat_item})
+            print(openai_msg)
             openai_args = {
                 "model": args.model_pretty_name,
                 "prompt": None,
@@ -169,8 +173,7 @@ if __name__ == "__main__":
             }  
             result = api(**openai_args) 
             outputs.append(result) 
-            save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath) 
-    
+            save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)     
     
     
     
