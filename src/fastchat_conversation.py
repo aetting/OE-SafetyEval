@@ -24,6 +24,8 @@ def map_to_conv(model_name):
         conv = get_conv_template("Yi-34b-chat")
     elif "vicuna" in model_name.lower():
         conv = get_conv_template("vicuna_v1.1")
+    elif "olmo" in model_name.lower():
+        conv = get_conv_template("olmo")
     else:
         raise ValueError(f"Model {model_name} is not supported.")
 
@@ -585,6 +587,16 @@ register_conv_template(
 register_conv_template(
     Conversation(
         name="tulu",
+        roles=("<|user|>", "<|assistant|>"),
+        sep_style=SeparatorStyle.ADD_NEW_LINE_SINGLE,
+        sep="\n",
+    )
+)
+
+# Tulu default template
+register_conv_template(
+    Conversation(
+        name="olmo",
         roles=("<|user|>", "<|assistant|>"),
         sep_style=SeparatorStyle.ADD_NEW_LINE_SINGLE,
         sep="\n",
