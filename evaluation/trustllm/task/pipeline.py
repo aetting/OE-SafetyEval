@@ -290,6 +290,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser() 
     parser.add_argument('--truthfulness', action='store_true')
     parser.add_argument('--safety', action='store_true')
+    parser.add_argument('--ex_safety', type=str,default=None)
     parser.add_argument('--fairness', action='store_true')
     parser.add_argument('--robustness', action='store_true')
     parser.add_argument('--privacy', action='store_true')
@@ -305,7 +306,7 @@ if __name__ == "__main__":
     if args.safety:
         safety_results = run_safety(  
             # jailbreak_path="path_to_jailbreak_data.json",  
-            exaggerated_safety_path="result_dirs/wild_bench/gpt-3.5-turbo-0125.0-5.json",  
+            exaggerated_safety_path=args.ex_safety,  
             # misuse_path="path_to_misuse_data.json",  
             # toxicity_eval=True,  
             # toxicity_path="path_to_toxicity_data.json",  
