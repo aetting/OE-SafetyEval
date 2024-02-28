@@ -115,8 +115,6 @@ if __name__ == "__main__":
     
     
     todo_inputs = model_inputs[num_skipped:]
-
-    import pdb; pdb.set_trace()
     
     if args.engine == "vllm": 
         sampling_params = SamplingParams(top_p=args.top_p, temperature=args.temperature, repetition_penalty=args.repetition_penalty, max_tokens=args.max_tokens, 
@@ -141,6 +139,7 @@ if __name__ == "__main__":
                 "no_repeat_ngram_size": args.no_repeat_ngram_size,
             }
             batch_outputs = llm.infer_generate(batch_inputs, args=sampling_params)
+            import pdb; pdb.set_trace()
             outputs.extend(batch_outputs) # TODO: enbale multiple generation 
             save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
         save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
