@@ -116,7 +116,7 @@ if __name__ == "__main__":
     
     todo_inputs = model_inputs[num_skipped:]
 
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     
     if args.engine == "vllm": 
         sampling_params = SamplingParams(top_p=args.top_p, temperature=args.temperature, repetition_penalty=args.repetition_penalty, max_tokens=args.max_tokens, 
