@@ -610,8 +610,8 @@ register_conv_template(
 register_conv_template(
     Conversation(
         name="olmo",
-        system_template="<|system|>{system_message}",
-        system_message="You are a helpful assistant",
+        # system_template="<|system|>{system_message}",
+        # system_message="You are a helpful assistant",
         roles=("<|user|>", "<|assistant|>"),
         sep_style=SeparatorStyle.OLMO,
         sep="\n",

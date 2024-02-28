@@ -10,7 +10,7 @@ from unified_utils import load_eval_data, save_outputs
 from unified_utils import openai_chat_request, retry_handler
 from hf_models import DecoderOnlyModelManager
 
-os.environ['HF_HUB_OFFLINE']=1
+# os.environ['HF_HUB_OFFLINE']=1
 
 def parse_args():
     parser = argparse.ArgumentParser() 
