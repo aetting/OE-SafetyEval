@@ -139,7 +139,7 @@ if __name__ == "__main__":
                 "no_repeat_ngram_size": args.no_repeat_ngram_size,
             }
             batch_outputs = llm.infer_generate(batch_inputs, args=sampling_params)
-            import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
             outputs.extend(batch_outputs) # TODO: enbale multiple generation 
             save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
         save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
