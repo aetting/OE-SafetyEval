@@ -312,6 +312,7 @@ if __name__ == "__main__":
             # toxicity_path="path_to_toxicity_data.json",  
             jailbreak_eval_type="total"  
         ) 
+        print(safety_results)
     if args.fairness:
         fairness_results = run_fairness(
             stereotype_recognition_path="path_to_stereotype_recognition_data.json",      
