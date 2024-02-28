@@ -239,7 +239,7 @@ class DecoderOnlyModelManager(ModelManager):
             args_.__setattr__("no_repeat_ngram_size", args.get("no_repeat_ngram_size", 0))
             args_.__setattr__("length_penalty", args.get("length_penalty", 1.0))
             args_.__setattr__("force_words", args.get("force_words", ""))
-            args_.__setattr__("eof_strings", args.get("eof_strings", "---|Query:"))
+            args_.__setattr__("eof_strings", args.get("eof_strings", ""))
             args = args_
             
             
