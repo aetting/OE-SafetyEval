@@ -128,7 +128,6 @@ class Conversation:
                         ret += role + "\n" + message + self.sep
                 else:
                     ret += role + "\n"
-            ret += "|||IP_ADDRESS|||"
             return ret
         elif self.sep_style == SeparatorStyle.NO_COLON_SINGLE:
             ret = system_prompt
