@@ -1,4 +1,4 @@
-from evaluation.trustllm.utils import longformer, metrics, perspective
+from utils import longformer, metrics, perspective
 
 
 class SafetyEval:
