@@ -1,7 +1,5 @@
 import ethics,fairness, privacy, robustness, safety, truthfulness
 from utils import file_process
-# from evaluation.trustllm.task import ethics, fairness, privacy, robustness, safety, truthfulness
-# from evaluation.trustllm.utils import file_process
 import argparse
 
 
