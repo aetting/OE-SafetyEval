@@ -268,6 +268,7 @@ class DecoderOnlyModelManager(ModelManager):
         if args.penalty_alpha > 0:
             # low_memory = True  # if the memory is not enough for you
             pass 
+        import pdb; pdb.set_trace()
         outputs = self.model.generate(
                         input_ids=inputs['input_ids'].to(device), 
                         attention_mask=inputs['attention_mask'].to(device),
