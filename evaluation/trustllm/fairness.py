@@ -1,4 +1,4 @@
-from evaluation.trustllm.utils import metrics, longformer, gpt_auto_eval
+from utils import metrics, longformer, gpt_auto_eval
 
 class FairnessEval:
     """

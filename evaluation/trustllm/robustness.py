@@ -1,11 +1,11 @@
-from evaluation.trustllm.utils import embedder, file_process, metrics, longformer, gpt_auto_eval
+from utils import embedder, file_process, metrics, longformer, gpt_auto_eval
 from sklearn.metrics import f1_score
 from collections import defaultdict
 import trustllm
 import re
 import os
 import openai
-import evaluation.trustllm.config
+import config
 
 
 class RobustnessEval:
