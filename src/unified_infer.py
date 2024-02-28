@@ -58,7 +58,7 @@ if __name__ == "__main__":
         args.tokenizer_name = args.model_name
     if args.engine == "vllm":
         from vllm import LLM, SamplingParams
-        llm = LLM(model=args.model_name, tokenizer=args.tokenizer_name, tensor_parallel_size=args.tensor_parallel_size, download_dir=args.download_dir, dtype=args.dtype, tokenizer_mode=args.tokenizer_mode)        
+        llm = LLM(model=args.model_name, tokenizer=args.tokenizer_name, tensor_parallel_size=args.tensor_parallel_size, download_dir=args.download_dir, dtype=args.dtype, tokenizer_mode=args.tokenizer_mode,trust_remote_code=True)        
     elif args.engine == "hf":
         llm = DecoderOnlyModelManager(args.model_name, args.model_name, cache_dir=args.download_dir, 
                                     bf16=args.hf_bf16, gptq=args.hf_gptq)     
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     elif args.engine == "openai":
         pass
     
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     print("loading dataset!")
     # Data loading 
     id_strs, chat_history, model_inputs, metadata = load_eval_data(args) 

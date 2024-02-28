@@ -54,6 +54,7 @@ class SeparatorStyle(IntEnum):
     METAMATH = auto()
     URIAL = auto() 
     URIAL_V6 = auto()
+    OLMO = auto()
 
 
 @dataclasses.dataclass
@@ -116,6 +117,18 @@ class Conversation:
                     ret += role + "\n" + message + self.sep
                 else:
                     ret += role + "\n"
+            return ret
+        elif self.sep_style == SeparatorStyle.OLMO:
+            ret = "|||IP_ADDRESS|||" if system_prompt == "" else "|||IP_ADDRESS|||" + system_prompt + self.sep
+            for role, message in self.messages:
+                if message:
+                    if role == "<|assistant|>":
+                        ret += role + "\n" + message + "|||IP_ADDRESS|||" + self.sep
+                    else:
+                        ret += role + "\n" + message + self.sep
+                else:
+                    ret += role + "\n"
+            ret += "|||IP_ADDRESS|||"
             return ret
         elif self.sep_style == SeparatorStyle.NO_COLON_SINGLE:
             ret = system_prompt
@@ -593,12 +606,14 @@ register_conv_template(
     )
 )
 
-# Tulu default template
+# OLMo default template
 register_conv_template(
     Conversation(
         name="olmo",
+        system_template="<|system|>{system_message}",
+        system_message="You are a helpful assistant",
         roles=("<|user|>", "<|assistant|>"),
-        sep_style=SeparatorStyle.ADD_NEW_LINE_SINGLE,
+        sep_style=SeparatorStyle.OLMO,
         sep="\n",
     )
 )
