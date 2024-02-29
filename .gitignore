@@ -162,3 +162,6 @@ cython_debug/
 evaluation/results/
 
 .DS_Store
+result_dirs/alpaca_eval/hf_example_test.json
+result_dirs/alpaca_eval/tmp_hf_example_test/hf_example_test.json
+result_dirs/alpaca_eval/tmp_hf_example_test/Llama-2-7b-chat-hf.0-256.json
