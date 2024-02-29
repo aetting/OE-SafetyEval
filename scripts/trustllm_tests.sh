@@ -1,5 +1,6 @@
-model_name="allenai/tulu-2-dpo-7b"
-model_name="allenai/OLMo-7B"
+# model_name="allenai/tulu-2-dpo-7b"
+# model_name="allenai/OLMo-7B"
+model_name="/net/nfs.cirrascale/allennlp/hamishi/checkpoints/olmo_7b_finetune_dpo"
 TEMP=0.7; TOP_P=1.0; MAX_TOKENS=512;
 # gpu="0,1,2,3"; num_gpus=4; 
 
