@@ -258,6 +258,8 @@ class DecoderOnlyModelManager(ModelManager):
     
         inputs = self.tokenizer(input_data, return_tensors="pt", add_special_tokens=self.special_token_flags[0], padding=padding)
         _, prefix_length = inputs["input_ids"].shape 
+
+        import pdb; pdb.set_trace()
          
         
         
