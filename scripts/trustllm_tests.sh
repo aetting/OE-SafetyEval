@@ -41,6 +41,13 @@ safety=(
 "misuse.json"
 )
 
+ethics=(
+"awareness.json"
+"explicit_moralchoice.json"
+"implicit_ETHICS.json"
+"implicit_SocialChemistry101.json"
+)
+
 # Data-parallellism
 # start_gpu=0
 num_gpus=1
