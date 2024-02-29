@@ -242,9 +242,13 @@ class DecoderOnlyModelManager(ModelManager):
             args_.__setattr__("eof_strings", args.get("eof_strings", ""))
             args = args_
             
-            
-        eof_strings = [s.strip() for s in args.eof_strings.split("|")]
-        
+        if args.eof_strings and "|" in args.eof_strings:
+            eof_strings = [s.strip() for s in args.eof_strings.split("|")]
+            stopping_criteria = StoppingCriteriaList([EndOfFunctionCriteria(start_length=prefix_length, eof_strings=eof_strings, tokenizer=self.tokenizer)])
+        else:
+            eof_strings = None 
+            stopping_criteria = None 
+
         # Run Llama model inference to generate output
         if len(input_data) > 1:        
             padding = True 
@@ -259,15 +263,16 @@ class DecoderOnlyModelManager(ModelManager):
         inputs = self.tokenizer(input_data, return_tensors="pt", add_special_tokens=self.special_token_flags[0], padding=padding)
         _, prefix_length = inputs["input_ids"].shape 
          
+        # print(f"prefix_length: {prefix_length}")
         
         
-        stopping_criteria = StoppingCriteriaList([EndOfFunctionCriteria(start_length=prefix_length, eof_strings=eof_strings, tokenizer=self.tokenizer)])
         
          
         low_memory = False 
         if args.penalty_alpha > 0:
             # low_memory = True  # if the memory is not enough for you
             pass 
+        # print(f"args.max_output_tokens={args.max_output_tokens}")
         outputs = self.model.generate(
                         input_ids=inputs['input_ids'].to(device), 
                         attention_mask=inputs['attention_mask'].to(device),
@@ -292,20 +297,20 @@ class DecoderOnlyModelManager(ModelManager):
                     )   
         # decoded_outputs = [self.tokenizer.decode(y).strip() for y in outputs]    
         decoded_outputs = [self.tokenizer.decode(y[prefix_length:], skip_special_tokens=self.special_token_flags[1]) for y in outputs]    
-        
+        # print(f"dectoded_outputs v1: {decoded_outputs}")
         decoded_outputs = [decoded_outputs[j:j+n] for j in range(0, len(decoded_outputs), n)]
-
-        cleaned_decoded_outputs = []
-        eof_strings.sort(key=len, reverse=True)
-        for outputs in decoded_outputs:
-            stripped_outputs = []
-            for o in outputs:
-                for eof in eof_strings:
-                    o = o.rstrip(eof).strip()
-                stripped_outputs.append(o)
-            cleaned_decoded_outputs.append(stripped_outputs)
-        
-        decoded_outputs = cleaned_decoded_outputs
+        # print(f"dectoded_outputs v2: {decoded_outputs}")
+        if eof_strings is not None and len(eof_strings) > 0:
+            cleaned_decoded_outputs = []
+            eof_strings.sort(key=len, reverse=True)
+            for outputs in decoded_outputs:
+                stripped_outputs = []
+                for o in outputs:
+                    for eof in eof_strings:
+                        o = o.rstrip(eof).strip()
+                    stripped_outputs.append(o)
+                cleaned_decoded_outputs.append(stripped_outputs)
+            decoded_outputs = cleaned_decoded_outputs
 
         if self.adapt_mode in ["prefix", "retrieve+prefix"]:
             decoded_outputs_with_prefixes = []
