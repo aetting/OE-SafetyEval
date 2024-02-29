@@ -305,7 +305,7 @@ if __name__ == "__main__":
             sycophancy_path=os.path.join(args.truthfulness_dir,"sycophancy",args.filename),
             advfact_path=os.path.join(args.truthfulness_dir,"golden_advfactuality",args.filename)
         )
-    print(truthfulness_results)
+        print(truthfulness_results)
     if args.safety_dir:
         safety_results = run_safety(  
             jailbreak_path=os.path.join(args.safety_dir,"sycophancy",args.filename),  
@@ -324,7 +324,7 @@ if __name__ == "__main__":
             disparagement_path=os.path.join(args.fairness_dir,"disparagement",args.filename),      
             preference_path=os.path.join(args.fairness_dir,"preference",args.filename)   
         ) 
-    print(fairness_results)
+        print(fairness_results)
     if args.robustness_dir:
         robustness_results = run_robustness(  
             advglue_path=os.path.join(args.robustness_dir,"advglue",args.filename)  ,  
@@ -332,14 +332,14 @@ if __name__ == "__main__":
             ood_detection_path=os.path.join(args.robustness_dir,"ood_detection",args.filename)  ,  
             ood_generalization_path=os.path.join(args.robustness_dir,"ood_generalization",args.filename) 
         ) 
-    print(robustness_results)
+        print(robustness_results)
     if args.privacy_dir:
         privacy_results = run_privacy(  
             privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_confAIde",args.filename) ,  
             privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness",args.filename) ,  
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
-    print(privacy_results)
+        print(privacy_results)
     if args.ethics_dir:
         ethics_results = run_ethics(  
             explicit_ethics_path=os.path.join(args.ethics_dir,"explicit_moralchoice",args.filename), 
