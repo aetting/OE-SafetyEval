@@ -289,11 +289,12 @@ def run_fairness(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser() 
-    parser.add_argument('--truthfulness_dir', type=str, default=None)
-    parser.add_argument('--safety_dir', type=str, default=None)
-    parser.add_argument('--fairness_dir', type=str, default=None)
-    parser.add_argument('--robustness_dir', type=str, default=None)
-    parser.add_argument('--privacy_dir', type=str, default=None)
+    parser.add_argument('--truthfulness_dir', type=str, default="")
+    parser.add_argument('--safety_dir', type=str, default="")
+    parser.add_argument('--fairness_dir', type=str, default="")
+    parser.add_argument('--robustness_dir', type=str, default="")
+    parser.add_argument('--privacy_dir', type=str, default="")
+    parser.add_argument('--ethics_dir', type=str, default="")
     parser.add_argument('--filename', type=str, default=None)
     args = parser.parse_args()
     
@@ -308,7 +309,7 @@ if __name__ == "__main__":
         print(truthfulness_results)
     if args.safety_dir:
         safety_results = run_safety(  
-            jailbreak_path=os.path.join(args.safety_dir,"sycophancy",args.filename),  
+            jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),  
             exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
             misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
             # toxicity_eval=True,  
