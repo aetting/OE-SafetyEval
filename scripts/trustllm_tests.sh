@@ -47,7 +47,7 @@ num_gpus=1
 # shards_dir="${output_dir}/tmp_${model_pretty_name}"
 # for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start_gpu; start += $shard_size, end += $shard_size, gpu++)); do
 #     CUDA_VISIBLE_DEVICES=$gpu \
-for AREA in safety privacy fairness truthfulness robustness
+for AREA in privacy fairness truthfulness robustness
     do
     echo $AREA
     areaArray=$AREA[@]
