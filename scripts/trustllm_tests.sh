@@ -67,7 +67,7 @@ for AREA in safety privacy fairness truthfulness robustness
         --tensor_parallel_size $num_gpus \
         --dtype bfloat16 \
         --top_p $TOP_P \
-        --end_index 5 \
+        --end_index 10 \
         --temperature $TEMP \
         --max_tokens $MAX_TOKENS \
         --overwrite
