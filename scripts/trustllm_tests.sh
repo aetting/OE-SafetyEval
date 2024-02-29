@@ -1,4 +1,5 @@
 model_name="allenai/tulu-2-dpo-7b"
+model_name="allenai/OLMo-7B"
 TEMP=0.7; TOP_P=1.0; MAX_TOKENS=512;
 # gpu="0,1,2,3"; num_gpus=4; 
 
@@ -47,7 +48,8 @@ num_gpus=1
 # shards_dir="${output_dir}/tmp_${model_pretty_name}"
 # for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start_gpu; start += $shard_size, end += $shard_size, gpu++)); do
 #     CUDA_VISIBLE_DEVICES=$gpu \
-for AREA in privacy fairness truthfulness robustness
+# for AREA in safety privacy fairness truthfulness robustness
+for AREA in robustness
     do
     echo $AREA
     areaArray=$AREA[@]
