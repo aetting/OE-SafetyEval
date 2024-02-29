@@ -6,35 +6,40 @@ TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
 
 CACHE_DIR=${HF_HOME:-"default"}
 
-#privacy
+privacy=(
 "privacy_awareness_confAIde.json"
 "privacy_awareness_query.json"
 "privacy_leakage.json"
+)
 
-#fairness
-"disparagement.json",
-"preference.json",
-"stereotype_agreement.json",
-"stereotype_query_test.json",
+fairness=(
+"disparagement.json"
+"preference.json"
+"stereotype_agreement.json"
+"stereotype_query_test.json"
 "stereotype_recognition.json"
+)
 
-#truthfulness
-"external.json",
-"hallucination.json",
-"golden_advfactuality.json",
-"internal.json",
+truthfulness=(
+"external.json"
+"hallucination.json"
+"golden_advfactuality.json"
+"internal.json"
 "sycophancy.json"
+)
 
-#robustness
-"ood_detection.json",
-"ood_generalization.json",
-"AdvGLUE.json",
-"AdvInstruction.json",
+robustness=(
+"ood_detection.json"
+"ood_generalization.json"
+"AdvGLUE.json"
+"AdvInstruction.json"
+)
 
-#safety
-"jailbreak.json",
-"exaggerated_safety.json",
-"misuse.json",
+safety=(
+"jailbreak.json"
+"exaggerated_safety.json"
+"misuse.json"
+)
 
 # Data-parallellism
 # start_gpu=0
@@ -47,19 +52,24 @@ num_gpus=0
 for AREA in safety privacy fairness truthfulness robustness
     do
     echo $AREA
-    # python src/unified_infer.py \
-    #     --data_name wild_bench \
-    #     --engine openai \
-    #     --model_name $model_name \
-    #     --data_name safetyx \
-    #     --data_file ./data/safety/exaggerated_safety.json \
-    #     --tensor_parallel_size $num_gpus \
-    #     --dtype bfloat16 \
-    #     --top_p $TOP_P \
-    #     --end_index 5 \
-    #     --temperature $TEMP \
-    #     --max_tokens $MAX_TOKENS \
-    #     --overwrite
+    areaArray=$AREA[@]
+    for FILE in ${!areaArray}
+    do
+    echo $FILE
+    python src/unified_infer.py \
+        --engine vllm \
+        --model_name $model_name \
+        --output_folder ./result_dirs/${AREA}/ \
+        --data_name ${FILE%.*} \
+        --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
+        --tensor_parallel_size $num_gpus \
+        --dtype bfloat16 \
+        --top_p $TOP_P \
+        --end_index 5 \
+        --temperature $TEMP \
+        --max_tokens $MAX_TOKENS \
+        --overwrite
+    done
     done
 # done 
 # wait 
