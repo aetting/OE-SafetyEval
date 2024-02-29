@@ -1,6 +1,7 @@
 import ethics,fairness, privacy, robustness, safety, truthfulness
 from utils import file_process
 import argparse
+import os
 
 
 def run_ethics(
@@ -11,7 +12,7 @@ def run_ethics(
     implicit_ethics_res_ETHICS, implicit_ethics_res_social_norm = None, None
     awareness_res = None
 
-    if explicit_ethics_path is not None:
+    if os.path.isfile(explicit_ethics_path):
         explicit_ethics_data = file_process.load_json(explicit_ethics_path)
         explicit_ethics_res_low = evaluator.explicit_ethics_eval(
             explicit_ethics_data, eval_type="low"
@@ -20,19 +21,19 @@ def run_ethics(
             explicit_ethics_data, eval_type="high"
         )
 
-    if implicit_ethics_path_social_norm is not None:
+    if os.path.isfile(implicit_ethics_path_social_norm):
         implicit_ethics_data_social_norm = file_process.load_json(implicit_ethics_path_social_norm)
         implicit_ethics_res_ETHICS = evaluator.implicit_ethics_eval(
             implicit_ethics_data_social_norm, eval_type="social_norm"
         )
 
-    if implicit_ethics_path_ETHICS is not None:
+    if os.path.isfile(implicit_ethics_path_ETHICS):
         implicit_ethics_data_ETHICS = file_process.load_json(implicit_ethics_path_ETHICS)
         implicit_ethics_res_social_norm = evaluator.implicit_ethics_eval(
             implicit_ethics_data_ETHICS, eval_type="ETHICS"
         )
 
-    if awareness_path is not None:
+    if os.path.isfile(awareness_path):
         awareness_data = file_process.load_json(awareness_path)
         awareness_res = evaluator.awareness_eval(
             awareness_data
@@ -59,7 +60,7 @@ def run_safety(
 
     jailbreak_res, toxicity_res, exaggerated_res, misuse_res = None, None, None, None
 
-    if jailbreak_path is not None:
+    if os.path.isfile(jailbreak_path):
         jailbreak_data = file_process.load_json(jailbreak_path)
         eval_data, jailbreak_res = evaluator.jailbreak_eval(
             jailbreak_data, eval_type=jailbreak_eval_type, return_data=True
@@ -67,11 +68,11 @@ def run_safety(
         if toxicity_eval and toxicity_path is None:
             toxicity_res = evaluator.toxicity_eval(eval_data)
 
-    if exaggerated_safety_path is not None:
+    if os.path.isfile(exaggerated_safety_path):
         exaggerated_data = file_process.load_json(exaggerated_safety_path)
         exaggerated_res = evaluator.exaggerated_eval(exaggerated_data)
 
-    if misuse_path is not None:
+    if os.path.isfile(misuse_path):
         misuse_data = file_process.load_json(misuse_path)
         misuse_res = evaluator.misuse_eval(misuse_data)
 
@@ -104,19 +105,19 @@ def run_robustness(
         None,
     )
 
-    if advglue_path is not None:
+    if os.path.isfile(advglue_path):
         advglue_data = file_process.load_json(advglue_path)
         advglue_res = evaluator.advglue_eval(advglue_data)
 
-    if advinstruction_path is not None:
+    if os.path.isfile(advinstruction_path):
         advinstruction_data = file_process.load_json(advinstruction_path)
         advinstruction_res = evaluator.advinstruction_eval(advinstruction_data)
 
-    if ood_detection_path is not None:
+    if os.path.isfile(ood_detection_path):
         ood_detection_data = file_process.load_json(ood_detection_path)
         ood_detection_res = evaluator.ood_detection(ood_detection_data)
 
-    if ood_generalization_path is not None:
+    if os.path.isfile(ood_generalization_path):
         ood_generalization_data = file_process.load_json(ood_generalization_path)
         ood_generalization_res = evaluator.ood_generalization(ood_generalization_data)
 
@@ -147,11 +148,11 @@ def run_privacy(
         None,
     )
 
-    if privacy_confAIde_path is not None:
+    if os.path.isfile(privacy_confAIde_path):
         privacy_confAIde_data = file_process.load_json(privacy_confAIde_path)
         privacy_confAIde_res = evaluator.ConfAIDe_eval(privacy_confAIde_data)
 
-    if privacy_awareness_query_path is not None:
+    if os.path.isfile(privacy_awareness_query_path):
         privacy_awareness_query_data = file_process.load_json(
             privacy_awareness_query_path
         )
@@ -162,7 +163,7 @@ def run_privacy(
             privacy_awareness_query_data, type="aug"
         )
 
-    if privacy_leakage_path is not None:
+    if os.path.isfile(privacy_leakage_path):
         privacy_leakage_data = file_process.load_json(privacy_leakage_path)
         privacy_leakage_res = evaluator.leakage_eval(privacy_leakage_data)
 
@@ -199,19 +200,19 @@ def run_truthfulness(
         None,
     )
 
-    if internal_path is not None:
+    if os.path.isfile(internal_path):
         internal_data = file_process.load_json(internal_path)
         internal_res = evaluator.internal_eval(internal_data)
 
-    if external_path is not None:
+    if os.path.isfile(external_path):
         external_data = file_process.load_json(external_path)
         external_res = evaluator.external_eval(external_data)
 
-    if hallucination_path is not None:
+    if os.path.isfile(hallucination_path):
         hallucination_data = file_process.load_json(hallucination_path)
         hallucination_res = evaluator.hallucination_eval(hallucination_data)
 
-    if sycophancy_path is not None:
+    if os.path.isfile(sycophancy_path):
         sycophancy_data = file_process.load_json(sycophancy_path)
         sycophancy_persona_res = evaluator.sycophancy_eval(
             sycophancy_data, eval_type="persona"
@@ -220,7 +221,7 @@ def run_truthfulness(
             sycophancy_data, eval_type="preference"
         )
 
-    if advfact_path is not None:
+    if os.path.isfile(advfact_path):
         advfact_data = file_process.load_json(advfact_path)
         advfact_res = evaluator.advfact_eval(advfact_data)
 
@@ -288,49 +289,62 @@ def run_fairness(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser() 
-    parser.add_argument('--truthfulness', action='store_true')
-    parser.add_argument('--safety', action='store_true')
-    parser.add_argument('--ex_safety', type=str,default=None)
-    parser.add_argument('--fairness', action='store_true')
-    parser.add_argument('--robustness', action='store_true')
-    parser.add_argument('--privacy', action='store_true')
+    parser.add_argument('--truthfulness_dir', type=str, default=None)
+    parser.add_argument('--safety_dir', type=str, default=None)
+    parser.add_argument('--fairness_dir', type=str, default=None)
+    parser.add_argument('--robustness_dir', type=str, default=None)
+    parser.add_argument('--privacy_dir', type=str, default=None)
+    parser.add_argument('--filename', type=str, default=None)
     args = parser.parse_args()
     
-    if args.truthfulness:
+    if args.truthfulness_dir:
         truthfulness_results = run_truthfulness(  
-            internal_path="path_to_internal_consistency_data.json",  
-            external_path="path_to_external_consistency_data.json",  
-            hallucination_path="path_to_hallucination_data.json",  
-            sycophancy_path="path_to_sycophancy_data.json"
+            internal_path=os.path.join(args.truthfulness_dir,"internal",args.filename),  
+            external_path=os.path.join(args.truthfulness_dir,"external",args.filename),  
+            hallucination_path=os.path.join(args.truthfulness_dir,"hallucination",args.filename),  
+            sycophancy_path=os.path.join(args.truthfulness_dir,"sycophancy",args.filename),
+            advfact_path=os.path.join(args.truthfulness_dir,"golden_advfactuality",args.filename)
         )
-    if args.safety:
+    print(truthfulness_results)
+    if args.safety_dir:
         safety_results = run_safety(  
-            # jailbreak_path="path_to_jailbreak_data.json",  
-            exaggerated_safety_path=args.ex_safety,  
-            # misuse_path="path_to_misuse_data.json",  
+            jailbreak_path=os.path.join(args.safety_dir,"sycophancy",args.filename),  
+            exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
+            misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
             # toxicity_eval=True,  
-            # toxicity_path="path_to_toxicity_data.json",  
+            # toxicity_path=os.path.join(args.safety_dir,"toxicity",args.filename),  
             jailbreak_eval_type="total"  
         ) 
         print(safety_results)
-    if args.fairness:
+    if args.fairness_dir:
         fairness_results = run_fairness(
-            stereotype_recognition_path="path_to_stereotype_recognition_data.json",      
-            stereotype_agreement_path="path_to_stereotype_agreement_data.json",      
-            stereotype_query_test_path="path_to_stereotype_query_test_data.json",      
-            disparagement_path="path_to_disparagement_data.json",      
-            preference_path="path_to_preference_data.json"   
+            stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition",args.filename),      
+            stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement",args.filename),      
+            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query",args.filename),      
+            disparagement_path=os.path.join(args.fairness_dir,"disparagement",args.filename),      
+            preference_path=os.path.join(args.fairness_dir,"preference",args.filename)   
         ) 
-    if args.robustness:
+    print(fairness_results)
+    if args.robustness_dir:
         robustness_results = run_robustness(  
-            advglue_path="path_to_advglue_data.json",  
-            advinstruction_path="path_to_advinstruction_data.json",  
-            ood_detection_path="path_to_ood_detection_data.json",  
-            ood_generalization_path="path_to_ood_generalization_data.json"  
+            advglue_path=os.path.join(args.robustness_dir,"advglue",args.filename)  ,  
+            advinstruction_path=os.path.join(args.robustness_dir,"advinstruction",args.filename)  ,  
+            ood_detection_path=os.path.join(args.robustness_dir,"ood_detection",args.filename)  ,  
+            ood_generalization_path=os.path.join(args.robustness_dir,"ood_generalization",args.filename) 
         ) 
-    if args.privacy:
+    print(robustness_results)
+    if args.privacy_dir:
         privacy_results = run_privacy(  
-            privacy_confAIde_path="path_to_privacy_confaide_data.json",  
-            privacy_awareness_query_path="path_to_privacy_awareness_query_data.json",  
-            privacy_leakage_path="path_to_privacy_leakage_data.json"  
+            privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_confAIde",args.filename) ,  
+            privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness",args.filename) ,  
+            privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
+    print(privacy_results)
+    if args.ethics_dir:
+        ethics_results = run_ethics(  
+            explicit_ethics_path=os.path.join(args.ethics_dir,"explicit_moralchoice",args.filename), 
+            implicit_ethics_path_social_norm=os.path.join(args.ethics_dir,"implicit_SocialChemistry101",args.filename), 
+            implicit_ethics_path_ETHICS=os.path.join(args.ethics_dir,"implicit_ETHICS",args.filename), 
+            awareness_path=os.path.join(args.ethics_dir,"awareness",args.filename)  
+        ) 
+        print(ethics_results)
