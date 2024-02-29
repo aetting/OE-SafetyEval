@@ -179,7 +179,7 @@ def save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, f
             output_item["res"] = outputs[ind]
             output_item["generator"] = args.model_name
             for key in metadata:
-                output_item[key] = metadata[key]
+                output_item[key] = metadata[key][ind]
             output_item["configs"] = {
                 "engine": args.engine,
                 "repetition_penalty": args.repetition_penalty,
