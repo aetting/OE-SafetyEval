@@ -1,7 +1,5 @@
-model_name="openai/gpt-3.5-turbo-0125"
-model_pretty_name="gpt-3.5-turbo-0125"
-output_dir="result_dirs/wild_bench/"
-TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
+model_name="allenai/tulu-2-dpo-7b"
+TEMP=0.7; TOP_P=1.0; MAX_TOKENS=512;
 # gpu="0,1,2,3"; num_gpus=4; 
 
 CACHE_DIR=${HF_HOME:-"default"}
@@ -43,7 +41,7 @@ safety=(
 
 # Data-parallellism
 # start_gpu=0
-num_gpus=0
+num_gpus=1
 # n_shards=4
 # shard_size=256
 # shards_dir="${output_dir}/tmp_${model_pretty_name}"
