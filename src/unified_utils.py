@@ -56,7 +56,11 @@ def load_eval_data(args, data_name=None, model_name=None):
             for item in mt_turn1_result:
                 id_to_turn1_result[item["question_id"]] = item["turn1_output"] 
     elif args.data_file:
-        dataset = load_dataset("json",data_files=args.data_file,split="train")
+        try:
+            dataset = load_dataset("json",data_files=args.data_file,split="train")
+        except:
+            with open(args.data_file) as json_file:
+                dataset = json.load(json_file)
 
     else:
         raise ValueError(f"Data name {data_name} not supported")

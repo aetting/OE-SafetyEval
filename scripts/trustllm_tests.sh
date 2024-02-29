@@ -61,7 +61,7 @@ for AREA in robustness
     python src/unified_infer.py \
         --engine vllm \
         --model_name $model_name \
-        --output_folder ./result_dirs/${AREA}/${DATA_NAME}/ \
+        --output_folder ./result_dirs/trustllm/${AREA}/${DATA_NAME}/ \
         --data_name ${DATA_NAME} \
         --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
         --tensor_parallel_size $num_gpus \
