@@ -44,19 +44,23 @@ num_gpus=0
 # shards_dir="${output_dir}/tmp_${model_pretty_name}"
 # for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start_gpu; start += $shard_size, end += $shard_size, gpu++)); do
 #     CUDA_VISIBLE_DEVICES=$gpu \
-python src/unified_infer.py \
-    --data_name wild_bench \
-    --engine openai \
-    --model_name $model_name \
-    --data_name safetyx \
-    --data_file ./data/safety/exaggerated_safety.json \
-    --tensor_parallel_size $num_gpus \
-    --dtype bfloat16 \
-    --top_p $TOP_P \
-    --end_index 5 \
-    --temperature $TEMP \
-    --max_tokens $MAX_TOKENS \
-    --overwrite
+for AREA in safety privacy fairness truthfulness robustness
+    do
+    echo $AREA
+    # python src/unified_infer.py \
+    #     --data_name wild_bench \
+    #     --engine openai \
+    #     --model_name $model_name \
+    #     --data_name safetyx \
+    #     --data_file ./data/safety/exaggerated_safety.json \
+    #     --tensor_parallel_size $num_gpus \
+    #     --dtype bfloat16 \
+    #     --top_p $TOP_P \
+    #     --end_index 5 \
+    #     --temperature $TEMP \
+    #     --max_tokens $MAX_TOKENS \
+    #     --overwrite
+    done
 # done 
 # wait 
 # python src/merge_results.py $shards_dir/ $model_pretty_name
