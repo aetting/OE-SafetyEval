@@ -88,6 +88,11 @@ def load_eval_data(args, data_name=None, model_name=None):
                 raise ValueError(f"mt_turn {args.mt_turn} not supported; must be 1 or 2")
         elif args.data_file:
             chat_history.append([item["prompt"]])
+            for key in item:
+                if key != "prompt":
+                    if key not in metadata:
+                        metadata[key] = []
+                    metadata[key].append(item[key])
         else:
             raise ValueError(f"Data name {data_name} not supported")
         for key in metadata: 
@@ -173,6 +178,8 @@ def save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, f
             output_item["prompt"] = chat_history[ind]
             output_item["res"] = outputs[ind]
             output_item["generator"] = args.model_name
+            for key in metadata:
+                output_item[key] = metadata[key]
             output_item["configs"] = {
                 "engine": args.engine,
                 "repetition_penalty": args.repetition_penalty,
