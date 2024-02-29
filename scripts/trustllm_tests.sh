@@ -54,11 +54,12 @@ for AREA in safety privacy fairness truthfulness robustness
     for FILE in ${!areaArray}
     do
     echo $FILE
+    DATA_NAME=${FILE%.*}
     python src/unified_infer.py \
         --engine vllm \
         --model_name $model_name \
-        --output_folder ./result_dirs/${AREA}/ \
-        --data_name ${FILE%.*} \
+        --output_folder ./result_dirs/${AREA}/${DATA_NAME}/ \
+        --data_name ${DATA_NAME} \
         --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
         --tensor_parallel_size $num_gpus \
         --dtype bfloat16 \
