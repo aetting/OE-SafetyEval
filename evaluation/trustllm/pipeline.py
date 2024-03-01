@@ -208,10 +208,12 @@ def run_truthfulness(
         external_data = file_process.load_json(external_path)
         external_res = evaluator.external_eval(external_data)
 
+    print("hallucination eval-------")
     if os.path.isfile(hallucination_path):
         hallucination_data = file_process.load_json(hallucination_path)
         hallucination_res = evaluator.hallucination_eval(hallucination_data)
 
+    print("sycophancy eval------")
     if os.path.isfile(sycophancy_path):
         sycophancy_data = file_process.load_json(sycophancy_path)
         sycophancy_persona_res = evaluator.sycophancy_eval(
@@ -221,6 +223,7 @@ def run_truthfulness(
             sycophancy_data, eval_type="preference"
         )
 
+    print("advfact eval------")
     if os.path.isfile(advfact_path):
         advfact_data = file_process.load_json(advfact_path)
         advfact_res = evaluator.advfact_eval(advfact_data)
