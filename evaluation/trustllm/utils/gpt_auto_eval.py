@@ -1,11 +1,11 @@
 import openai
 from tenacity import retry, wait_random_exponential, stop_after_attempt
-from trustllm.utils import file_process
+import file_process
 import logging
 import os
 # import trustllm
 import concurrent.futures
-from trustllm import config
+import config
 
 # Setting up basic logging configuration
 logging.basicConfig(filename='autoevaluator.log', level=logging.INFO,
