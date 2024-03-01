@@ -58,9 +58,15 @@ def load_eval_data(args, data_name=None, model_name=None):
     elif args.data_file:
         try:
             dataset = load_dataset("json",data_files=args.data_file,split="train")
+            for key in dataset.features:
+                metadata[key] = []
         except:
             with open(args.data_file) as json_file:
                 dataset = json.load(json_file)
+            for item in dataset:
+                for key in item:
+                    if key not in metadata: metadata[key] = []
+            
 
     else:
         raise ValueError(f"Data name {data_name} not supported")
@@ -88,18 +94,14 @@ def load_eval_data(args, data_name=None, model_name=None):
                 raise ValueError(f"mt_turn {args.mt_turn} not supported; must be 1 or 2")
         elif args.data_file:
             chat_history.append([item["prompt"]])
-            for key in item:
-                if key != "prompt":
-                    if key not in metadata:
-                        metadata[key] = []
-                    metadata[key].append(item[key])
         else:
             raise ValueError(f"Data name {data_name} not supported")
         for key in metadata: 
-            print(metadata)
-            print(item)
-            assert key in item, f"Key {key} not found in metadata"
-            metadata[key].append(item[key])
+            if key not in item: 
+                # f"Key {key} not found in metadata"
+                metadata[key].append(None)
+            else:
+                metadata[key].append(item[key])
     print("Start applying template")
     model_inputs = apply_template(chat_history, model_name)
     return id_strs, chat_history, model_inputs, metadata
