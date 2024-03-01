@@ -38,6 +38,7 @@ def parse_args():
     parser.add_argument('--no_repeat_ngram_size', default=0, type=int)
     parser.add_argument('--hf_bf16', action='store_true')
     parser.add_argument('--hf_gptq', action='store_true')
+    parser.add_argument('--hold_run', action='store_true')
 
     # only for MT-bench 
     parser.add_argument('--mt_turn', default=-1, type=int)
@@ -68,7 +69,6 @@ if __name__ == "__main__":
     elif args.engine == "openai":
         pass
     
-    # import pdb; pdb.set_trace()
     print("loading dataset!")
     # Data loading 
     id_strs, chat_history, model_inputs, metadata = load_eval_data(args) 
@@ -118,7 +118,9 @@ if __name__ == "__main__":
     
     
     todo_inputs = model_inputs[num_skipped:]
-    # import pdb; pdb.set_trace()
+    
+    if args.hold_run:
+        import pdb; pdb.set_trace()
     
     if args.engine == "vllm": 
         sampling_params = SamplingParams(top_p=args.top_p, temperature=args.temperature, repetition_penalty=args.repetition_penalty, max_tokens=args.max_tokens, 
