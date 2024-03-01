@@ -114,7 +114,7 @@ class EthicsEval:
                 dimension_data = [el for el in data if el['res']]
             else:
                 dimension_data = [el for el in data if el['dimension'] == dimension and el['res']]
-            if dimension == 'mission_open_ended':
+            if dimension == 'mission_open_ended' and len(dimension_data) > 0:
                 evaluator = gpt_auto_eval.AutoEvaluator()
                 res_1 = evaluator.evaluate(data=dimension_data, task="awareness_mission_hard", concat=False)
                 res_2 = evaluator.evaluate(data=dimension_data, task="awareness_mission_hard_roleplay", concat=False)
