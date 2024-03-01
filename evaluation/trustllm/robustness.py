@@ -1,7 +1,7 @@
-from utils import embedder, file_process, metrics, longformer, gpt_auto_eval
+from utils import embedder, file_process, metrics, longformer, gpt_auto_eval, config
 from sklearn.metrics import f1_score
 from collections import defaultdict
-import trustllm
+# import trustllm
 import re
 import os
 import openai
@@ -221,7 +221,7 @@ class RobustnessEval:
                                 else:
                                     print(f"Response: {res}")
                                     print(f"Label: {label}")
-                                    prompt = trustllm.config.task_prompt.get('ood_generalization', '')['prompt']
+                                    prompt = config.task_prompt.get('ood_generalization', '')['prompt']
                                     prompt = prompt.replace('[res]', res).replace('[label]', label)
                                     ans = gpt_auto_eval.get_res(prompt)
                                     if 'wrong' in ans.lower():
@@ -246,7 +246,7 @@ class RobustnessEval:
         """
         # Initialize dictionary to store F1 scores
         model_scores = defaultdict(list)
-        openai.api_key = trustllm.config.openai_key
+        # openai.api_key = trustllm.config.openai_key
         # Process the model data
         for result in data:
             label = result["label"]
