@@ -1,7 +1,10 @@
 # model_name="allenai/tulu-2-dpo-7b"
 # model_name="allenai/OLMo-7B"
-model_name="/net/nfs.cirrascale/allennlp/hamishi/checkpoints/olmo_7b_finetune_dpo"
-TEMP=0.7; TOP_P=1.0; MAX_TOKENS=512;
+# model_name="/net/nfs.cirrascale/allennlp/hamishi/checkpoints/olmo_7b_finetune_dpo"
+model_name="allenai/tulu-2-7b"
+TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
+batch_size=4
+# TEMP=0.7; TOP_P=1.0; MAX_TOKENS=512;
 # gpu="0,1,2,3"; num_gpus=4; 
 
 CACHE_DIR=${HF_HOME:-"default"}
@@ -57,7 +60,7 @@ num_gpus=1
 # for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start_gpu; start += $shard_size, end += $shard_size, gpu++)); do
 #     CUDA_VISIBLE_DEVICES=$gpu \
 # for AREA in safety privacy fairness truthfulness robustness ethics
-for AREA in privacy fairness truthfulness robustness ethics
+for AREA in safety truthfulness fairness privacy
     do
     echo $AREA
     areaArray=$AREA[@]
@@ -74,7 +77,7 @@ for AREA in privacy fairness truthfulness robustness ethics
         --tensor_parallel_size $num_gpus \
         --dtype bfloat16 \
         --top_p $TOP_P \
-        --end_index 10 \
+        --end_index 16 \
         --temperature $TEMP \
         --max_tokens $MAX_TOKENS \
         --overwrite
@@ -84,3 +87,18 @@ for AREA in privacy fairness truthfulness robustness ethics
 # wait 
 # python src/merge_results.py $shards_dir/ $model_pretty_name
 # cp $shards_dir/${model_pretty_name}.json $output_dir/${model_pretty_name}.json
+
+python src/unified_infer.py \
+    --engine vllm \
+    --model_name $model_name \
+    --output_folder ./result_dirs/safety/ \
+    --data_name jailbreak \
+    --data_file ../../tulu-eval/TrustLLM/dataset/safety/jailbreak.json \
+    --tensor_parallel_size $num_gpus \
+    --dtype bfloat16 \
+    --top_p $TOP_P \
+    --end_index 10 \
+    --temperature $TEMP \
+    --max_tokens $MAX_TOKENS \
+    --overwrite \ 
+    --hold_run
