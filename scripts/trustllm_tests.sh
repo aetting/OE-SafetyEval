@@ -80,6 +80,7 @@ for AREA in safety truthfulness fairness privacy
         --end_index 16 \
         --temperature $TEMP \
         --max_tokens $MAX_TOKENS \
+        --batch_size $batch_size \
         --overwrite
     done
     done
