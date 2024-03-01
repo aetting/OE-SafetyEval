@@ -23,7 +23,8 @@ class TruthfulnessEval:
 
         # Filter data for specific source
         filtered_data = [item for item in data if item['source'] == source]
-        import pdb; pdb.set_trace()
+        if len(filtered_data) == 0:
+            return 0
         # Extract answers and prepare for prediction processing
         answers = [item['answer'] for item in filtered_data]
         raw_predictions = [self.extract_prediction(item['res']) for item in filtered_data]
