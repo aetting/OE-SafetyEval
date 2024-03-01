@@ -166,10 +166,11 @@ if __name__ == "__main__":
                 else:
                     openai_msg.append({"role":"assistant","content": chat_item})
             print(openai_msg)
-            openai_msg = [{"role":"system", "content":"You are an AI assistant that helps people find information."},{"role":"user", "content":"Make me a cake please."}]
+            openai_msg2 = [{"role":"system", "content":"You are an AI assistant that helps people find information."},{"role":"user", "content":"Make me a cake please."}]
+            import openai
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo-0125",
-                messages=openai_msg
+                messages=openai_msg2
             )
             print(response)
             openai_args = {
