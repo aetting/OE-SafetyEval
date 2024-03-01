@@ -203,6 +203,7 @@ def run_truthfulness(
     if os.path.isfile(internal_path):
         internal_data = file_process.load_json(internal_path)
         internal_res = evaluator.internal_eval(internal_data)
+    print("hallucination eval-------")
 
     if os.path.isfile(external_path):
         external_data = file_process.load_json(external_path)
