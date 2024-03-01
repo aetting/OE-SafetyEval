@@ -24,9 +24,6 @@ class DataEmbedder:
         # Create the directory if it does not exist
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
-        # openai.api_key = trustllm.config.openai_key
-        # openai.api_key = os.getenv("OPENAI_API_KEY")
-        # trustllm.config.azure_openai = False
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(6))
     def get_embeddings(self, string):
@@ -39,12 +36,6 @@ class DataEmbedder:
         Returns:
             list: The embedding vector.
         """
-        # openai_msg = [{"role":"system", "content":"You are an AI assistant that helps people find information."},{"role":"user", "content":"Make me a cake please."}]
-        # response = openai.ChatCompletion.create(
-        #     model="gpt-3.5-turbo-0125",
-        #     messages=openai_msg
-        # )
-        # print(response)
         if string is None:
             string = ""
         response = openai.Embedding.create(
