@@ -5,7 +5,7 @@ import logging
 import os
 # import trustllm
 import concurrent.futures
-import config
+from . import config
 
 # Setting up basic logging configuration
 logging.basicConfig(filename='autoevaluator.log', level=logging.INFO,
