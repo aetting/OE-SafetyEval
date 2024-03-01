@@ -1,6 +1,6 @@
 import openai
 from tenacity import retry, wait_random_exponential, stop_after_attempt
-import file_process
+from . import file_process
 import logging
 import os
 # import trustllm
@@ -32,10 +32,10 @@ def get_res(string, model='gpt-4-1106-preview', temp=0):
 
     if config.azure_openai:
         openai.api_type = "azure"
-        openai.api_base = trustllm.config.azure_api_base
+        openai.api_base = config.azure_api_base
         openai.api_version = "2023-08-01-preview"
         completion = openai.ChatCompletion.create(
-            engine=trustllm.config.azure_engine,
+            engine=config.azure_engine,
             messages=[{"role": "user", "content": string}],
             temperature=temp
         )
