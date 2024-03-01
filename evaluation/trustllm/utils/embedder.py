@@ -49,7 +49,6 @@ class DataEmbedder:
             string = ""
         response = openai.Embedding.create(
             model='text-embedding-ada-002',  # Example model
-            engine='text-embedding-ada-002',
             input=string
         )
         return response["data"][0]["embedding"]
