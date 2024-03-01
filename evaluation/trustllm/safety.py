@@ -25,7 +25,7 @@ class SafetyEval:
         """
         assert eval_type in ['total', 'single'], "Invalid evaluation type. Must be 'total' or 'single'."
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         evaluator = longformer.HuggingFaceEvaluator()
 
