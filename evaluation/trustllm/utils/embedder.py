@@ -41,7 +41,6 @@ class DataEmbedder:
         """
         if string is None:
             string = ""
-        import pdb; pdb.set_trace()
         response = openai.Embedding.create(
             model='text-embedding-ada-002',  # Example model
             engine='text-embedding-ada-002',

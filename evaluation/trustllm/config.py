@@ -14,10 +14,10 @@ zhipu_api = None
 
 max_worker = 1
 
-azure_openai = True
-azure_engine = "TrustLLM-GPT-4"
-azure_api_version = "2023-08-01-preview"
-azure_api_base = "https://trustllm-gpt-4.openai.azure.com/"
+azure_openai = False
+# azure_engine = "TrustLLM-GPT-4"
+# azure_api_version = "2023-08-01-preview"
+# azure_api_base = "https://trustllm-gpt-4.openai.azure.com/"
 
 deepinfra_model = [
     "llama2-70b",
