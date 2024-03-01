@@ -39,6 +39,12 @@ class DataEmbedder:
         Returns:
             list: The embedding vector.
         """
+        openai_msg = [{"role":"system", "content":"You are an AI assistant that helps people find information."},{"role":"user", "content":"Make me a cake please."}]
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-0125",
+            messages=openai_msg
+        )
+        print(response)
         if string is None:
             string = ""
         response = openai.Embedding.create(
