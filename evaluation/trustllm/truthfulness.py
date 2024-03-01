@@ -278,6 +278,8 @@ class TruthfulnessEval:
         float: The accuracy of the evaluation based on the CODAH dataset.
         """
         codah_data = [item for item in data if item['source'] == 'codah']
+        if len(codah_data) == 0:
+            return 0
         predictions = []
 
         for item in codah_data:
@@ -289,7 +291,7 @@ class TruthfulnessEval:
         assert len(predictions) == len(gold_labels)
 
         correct = sum(pred == gold for pred, gold in zip(predictions, gold_labels))
-        return correct / len(codah_data) if len(codah_data) else 0
+        return correct / len(codah_data)
 
     def eval_internal_squad(self, data):
         """
@@ -302,6 +304,8 @@ class TruthfulnessEval:
         dict: A dictionary containing evaluation results for the SQuAD dataset.
         """
         squad_data = [item for item in data if item['source'] == 'squad']
+        if len(squad_data) == 0:
+            return 0
 
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(squad_data, task='squad', concat=False)
@@ -318,12 +322,14 @@ class TruthfulnessEval:
         dict: A dictionary containing evaluation results for adversarial data.
         """
         adv_data = [item for item in data if item['source'] == 'adversarial']
+        if len(adv_data) == 0:
+            return 0
         for item in adv_data:
             item['question_text'] = item['question']["paragraphs"][0]["qas"][0]["question"]
 
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(adv_data, task='adv', concat=False)
-        return metrics.count_yes_no(eval_res) if len(eval_res) > 0 else 0
+        return metrics.count_yes_no(eval_res)
 
     def eval_internal_hotpot(self, data):
         """
@@ -336,6 +342,8 @@ class TruthfulnessEval:
         dict: A dictionary containing evaluation results for the HotpotQA dataset.
         """
         hotpot_data = [item for item in data if item['source'] == 'hotpot']
+        if len(hotpot_data) == 0:
+            return 0
 
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(hotpot_data, task='hotpot', concat=False)
