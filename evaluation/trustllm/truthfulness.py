@@ -323,8 +323,7 @@ class TruthfulnessEval:
 
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(adv_data, task='adv', concat=False)
-        import pdb; pdb.set_trace()
-        return metrics.count_yes_no(eval_res) if len(eval_res) > 0 else None
+        return metrics.count_yes_no(eval_res) if len(eval_res) > 0 else 0
 
     def eval_internal_hotpot(self, data):
         """
@@ -340,7 +339,7 @@ class TruthfulnessEval:
 
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(hotpot_data, task='hotpot', concat=False)
-        return metrics.count_yes_no(eval_res) if len(eval_res) > 0 else None
+        return metrics.count_yes_no(eval_res)
 
     def internal_eval(self, data):
         """
