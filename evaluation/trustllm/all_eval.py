@@ -305,6 +305,7 @@ if __name__ == "__main__":
     parser.add_argument('--stereotype_query_test_path', type=str, default="")
     parser.add_argument('--disparagement_path', type=str, default="")
     parser.add_argument('--preference_path', type=str, default="")
+    parser.add_argument('--fairness', action='store_true')
     parser.add_argument('--filename', type=str, default=None)
     args = parser.parse_args()
     
@@ -318,7 +319,7 @@ if __name__ == "__main__":
             advfact_path=os.path.join(args.truthfulness_dir,"golden_advfactuality",args.filename)
         )
         print(truthfulness_results)
-        file_process.save_json(truthfulness_results,os.path.join(args.truthfulness_dir,'results_truthfulness.json'))
+        # file_process.save_json(truthfulness_results,os.path.join(args.truthfulness_dir,'results_truthfulness.json'))
     if args.safety_dir:
         print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
@@ -330,8 +331,8 @@ if __name__ == "__main__":
             jailbreak_eval_type="total"  
         ) 
         print(safety_results)
-        file_process.save_json(safety_results,os.path.join(args.safety_dir,'results_safety.json'))
-    if args.fairness_dir:
+        # file_process.save_json(safety_results,os.path.join(args.safety_dir,'results_safety.json'))
+    if args.fairness:
         print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
             stereotype_recognition_path=args.stereotype_recognition_path,      
@@ -341,7 +342,7 @@ if __name__ == "__main__":
             preference_path=args.preference_path   
         ) 
         print(fairness_results)
-        file_process.save_json(fairness_results,os.path.join(args.fairness_dir,'results_fairness.json'))
+        # file_process.save_json(fairness_results,os.path.join(args.fairness_dir,'results_fairness.json'))
     if args.robustness_dir:
         print("\nEVALUATING ROBUSTNESS\n")
         robustness_results = run_robustness(  
@@ -351,7 +352,7 @@ if __name__ == "__main__":
             ood_generalization_path=os.path.join(args.robustness_dir,"ood_generalization",args.filename) 
         ) 
         print(robustness_results)
-        file_process.save_json(robustness_results,os.path.join(args.robustness_dir,'results_robustness.json'))
+        # file_process.save_json(robustness_results,os.path.join(args.robustness_dir,'results_robustness.json'))
     if args.privacy_dir:
         print("\nEVALUATING PRIVACY\n")
         privacy_results = run_privacy(  
@@ -360,7 +361,7 @@ if __name__ == "__main__":
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
         print(privacy_results)
-        file_process.save_json(privacy_results,os.path.join(args.privacy_dir,'results_privacy.json'))
+        # file_process.save_json(privacy_results,os.path.join(args.privacy_dir,'results_privacy.json'))
     if args.ethics_dir:
         print("\nEVALUATING ETHICS\n")
         ethics_results = run_ethics(  
@@ -370,4 +371,4 @@ if __name__ == "__main__":
             awareness_path=os.path.join(args.ethics_dir,"awareness",args.filename)  
         ) 
         print(ethics_results)
-        file_process.save_json(ethics_results,os.path.join(args.ethics_dir,'results.ethics.json'))
+        # file_process.save_json(ethics_results,os.path.join(args.ethics_dir,'results.ethics.json'))
