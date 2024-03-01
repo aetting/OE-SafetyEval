@@ -149,7 +149,6 @@ def run_privacy(
     )
 
     if os.path.isfile(privacy_confAIde_path):
-        import pdb; pdb.set_trace()
         privacy_confAIde_data = file_process.load_json(privacy_confAIde_path)
         privacy_confAIde_res = evaluator.ConfAIDe_eval(privacy_confAIde_data)
 
@@ -342,8 +341,8 @@ if __name__ == "__main__":
         print(robustness_results)
     if args.privacy_dir:
         privacy_results = run_privacy(  
-            privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_confAIde",args.filename) ,  
-            privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness",args.filename) ,  
+            privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde",args.filename) ,  
+            privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
         print(privacy_results)
