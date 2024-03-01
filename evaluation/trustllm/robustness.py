@@ -5,7 +5,6 @@ import trustllm
 import re
 import os
 import openai
-import config
 
 
 class RobustnessEval:
