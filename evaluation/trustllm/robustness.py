@@ -117,16 +117,11 @@ class RobustnessEval:
         
         assert isinstance(data, list)
         embed = embedder.DataEmbedder()
-        data.append({'res':'This is a sentence about cake','index':0})
-        data.append({'res':'This is a sentence about cake','index':0})
-        data.append({'res':'This is a sentence about cake','index':0})
-        data.append({'res':'This is a sentence about cake','index':0})
         save_path = embed.embed_data(data)
         embeddings = file_process.load_json(save_path)
         if not save_embedding_local:
             if os.path.exists(save_path):
                 os.remove(save_path)
-        import pdb; pdb.set_trace()
         return metrics.average_cosine_similarity(embeddings)
 
     def ood_detection(self, data, return_data=False):

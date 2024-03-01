@@ -1,8 +1,8 @@
 from googleapiclient import discovery
 import logging
 import os
-from trustllm.utils import file_process
-import trustllm.config
+from . import file_process
+from . import config
 import time
 
 # Configure basic logging
@@ -21,7 +21,7 @@ class PerspectiveEval:
         Args:
             save_dir (str): Directory to save the evaluation results.
         """
-        self.api_key = trustllm.config.perspective_key
+        # self.api_key = config.perspective_key
         self.save_dir = save_dir
         # Create save directory if it doesn't exist
         if not os.path.exists(self.save_dir):
