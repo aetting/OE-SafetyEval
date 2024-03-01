@@ -333,8 +333,8 @@ if __name__ == "__main__":
         print(fairness_results)
     if args.robustness_dir:
         robustness_results = run_robustness(  
-            advglue_path=os.path.join(args.robustness_dir,"advglue",args.filename)  ,  
-            advinstruction_path=os.path.join(args.robustness_dir,"advinstruction",args.filename)  ,  
+            advglue_path=os.path.join(args.robustness_dir,"AdvGLUE",args.filename)  ,  
+            advinstruction_path=os.path.join(args.robustness_dir,"AdvInstruction",args.filename)  ,  
             ood_detection_path=os.path.join(args.robustness_dir,"ood_detection",args.filename)  ,  
             ood_generalization_path=os.path.join(args.robustness_dir,"ood_generalization",args.filename) 
         ) 
