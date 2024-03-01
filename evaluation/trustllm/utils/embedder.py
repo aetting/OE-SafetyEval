@@ -24,8 +24,7 @@ class DataEmbedder:
         # Create the directory if it does not exist
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
-        openai.api_key = trustllm.config.openai_key
-        import pdb; pdb.set_trace()
+        # openai.api_key = trustllm.config.openai_key
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(6))
     def get_embeddings(self, string):
