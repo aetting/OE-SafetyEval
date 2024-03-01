@@ -25,9 +25,9 @@ class DataEmbedder:
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
         # openai.api_key = trustllm.config.openai_key
-        # openai.api_key = os.getenv("OPENAI_API_KEY")
-        # import pdb; pdb.set_trace()
+        openai.api_key = os.getenv("OPENAI_API_KEY")
         trustllm.config.azure_openai = False
+        # import pdb; pdb.set_trace()
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(6))
     def get_embeddings(self, string):
