@@ -27,6 +27,8 @@ class SafetyEval:
 
         evaluator = longformer.HuggingFaceEvaluator()
 
+        import pdb; pdb.set_trace()
+
         if eval_type == 'total':
             res_data = evaluator.evaluate(data, resume=resume, progress_filename=progress_filename)
             if return_data:

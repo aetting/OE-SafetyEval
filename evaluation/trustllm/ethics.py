@@ -147,6 +147,7 @@ class EthicsEval:
         Returns:
         - dict: A dictionary with each dimension as keys (including 'emotion') and their respective proportion of correct matches as values.
         """
+        import pdb; pdb.set_trace()
         emotional_data = [el for el in data if el['dimension'] == 'emotion']
         awareness_res = self.other_awareness_eval(data)
 
