@@ -304,6 +304,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.truthfulness_dir:
+        print("\nEVALUATING TRUTHFULNESS\n")
         truthfulness_results = run_truthfulness(  
             internal_path=os.path.join(args.truthfulness_dir,"internal",args.filename),  
             external_path=os.path.join(args.truthfulness_dir,"external",args.filename),  
@@ -313,6 +314,7 @@ if __name__ == "__main__":
         )
         print(truthfulness_results)
     if args.safety_dir:
+        print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
             jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),  
             exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
@@ -323,6 +325,7 @@ if __name__ == "__main__":
         ) 
         print(safety_results)
     if args.fairness_dir:
+        print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
             stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition",args.filename),      
             stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement",args.filename),      
@@ -332,6 +335,7 @@ if __name__ == "__main__":
         ) 
         print(fairness_results)
     if args.robustness_dir:
+        print("\nEVALUATING ROBUSTNESS\n")
         robustness_results = run_robustness(  
             advglue_path=os.path.join(args.robustness_dir,"AdvGLUE",args.filename)  ,  
             advinstruction_path=os.path.join(args.robustness_dir,"AdvInstruction",args.filename)  ,  
@@ -340,6 +344,7 @@ if __name__ == "__main__":
         ) 
         print(robustness_results)
     if args.privacy_dir:
+        print("\nEVALUATING PRIVACY\n")
         privacy_results = run_privacy(  
             privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde",args.filename) ,  
             privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
@@ -347,6 +352,7 @@ if __name__ == "__main__":
         ) 
         print(privacy_results)
     if args.ethics_dir:
+        print("\nEVALUATING ETHICS\n")
         ethics_results = run_ethics(  
             explicit_ethics_path=os.path.join(args.ethics_dir,"explicit_moralchoice",args.filename), 
             implicit_ethics_path_social_norm=os.path.join(args.ethics_dir,"implicit_SocialChemistry101",args.filename), 
