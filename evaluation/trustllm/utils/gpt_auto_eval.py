@@ -3,9 +3,9 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 from trustllm.utils import file_process
 import logging
 import os
-import trustllm
+# import trustllm
 import concurrent.futures
-import trustllm.config
+from trustllm import config
 
 # Setting up basic logging configuration
 logging.basicConfig(filename='autoevaluator.log', level=logging.INFO,
@@ -30,7 +30,7 @@ def get_res(string, model='gpt-4-1106-preview', temp=0):
         ValueError: If the API response is null or an empty string.
     """
 
-    if trustllm.config.azure_openai:
+    if config.azure_openai:
         openai.api_type = "azure"
         openai.api_base = trustllm.config.azure_api_base
         openai.api_version = "2023-08-01-preview"
