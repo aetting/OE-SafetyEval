@@ -96,6 +96,7 @@ def load_eval_data(args, data_name=None, model_name=None):
         else:
             raise ValueError(f"Data name {data_name} not supported")
         for key in metadata: 
+            import pdb; pdb.set_trace()
             assert key in item, f"Key {key} not found in metadata"
             metadata[key].append(item[key])
     print("Start applying template")
