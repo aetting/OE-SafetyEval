@@ -197,6 +197,8 @@ class TruthfulnessEval:
         assert source in ['halu_qa', 'halu_summ', 'halu_dial']
 
         source_data = [item for item in data if item['source'] == source]
+        if len(source_data) == 0:
+            return 0
         predictions = []
 
         for item in tqdm(source_data, total=len(source_data), desc=f"Evaluating {source}"):
