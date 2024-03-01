@@ -300,11 +300,11 @@ if __name__ == "__main__":
     parser.add_argument('--robustness_dir', type=str, default="")
     parser.add_argument('--privacy_dir', type=str, default="")
     parser.add_argument('--ethics_dir', type=str, default="")
-    stereotype_recognition_path      
-            stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement",args.filename),      
-            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query_test",args.filename),      
-            disparagement_path=os.path.join(args.fairness_dir,"disparagement",args.filename),      
-            preference_path=os.path.join(args.fairness_dir,"preference",args.filename) 
+    parser.add_argument('--stereotype_recognition_path', type=str, default="")
+    parser.add_argument('--stereotype_agreement_path', type=str, default="")
+    parser.add_argument('--stereotype_query_test_path', type=str, default="")
+    parser.add_argument('--disparagement_path', type=str, default="")
+    parser.add_argument('--preference_path', type=str, default="")
     parser.add_argument('--filename', type=str, default=None)
     args = parser.parse_args()
     
@@ -334,11 +334,11 @@ if __name__ == "__main__":
     if args.fairness_dir:
         print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
-            stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition",args.filename),      
-            stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement",args.filename),      
-            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query_test",args.filename),      
-            disparagement_path=os.path.join(args.fairness_dir,"disparagement",args.filename),      
-            preference_path=os.path.join(args.fairness_dir,"preference",args.filename)   
+            stereotype_recognition_path=args.stereotype_recognition_path,      
+            stereotype_agreement_path=args.stereotype_agreement_path,      
+            stereotype_query_test_path=args.stereotype_query_test_path,      
+            disparagement_path=args.disparagement_path,      
+            preference_path=args.preference_path   
         ) 
         print(fairness_results)
         file_process.save_json(fairness_results,os.path.join(args.fairness_dir,'results_fairness.json'))

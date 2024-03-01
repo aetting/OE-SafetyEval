@@ -60,30 +60,32 @@ num_gpus=1
 # for ((start = 0, end = (($shard_size)), gpu = $start_gpu; gpu < $n_shards+$start_gpu; start += $shard_size, end += $shard_size, gpu++)); do
 #     CUDA_VISIBLE_DEVICES=$gpu \
 # for AREA in safety privacy fairness truthfulness robustness ethics
-for AREA in safety truthfulness fairness privacy
-    do
-    echo $AREA
-    areaArray=$AREA[@]
-    for FILE in ${!areaArray}
-    do
-    echo $FILE
-    DATA_NAME=${FILE%.*}
-    python src/unified_infer.py \
-        --engine vllm \
-        --model_name $model_name \
-        --output_folder ./result_dirs/trustllm/${AREA}/${DATA_NAME}/ \
-        --data_name ${DATA_NAME} \
-        --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
-        --tensor_parallel_size $num_gpus \
-        --dtype bfloat16 \
-        --top_p $TOP_P \
-        --end_index 16 \
-        --temperature $TEMP \
-        --max_tokens $MAX_TOKENS \
-        --batch_size $batch_size \
-        --overwrite
-    done
-    done
+
+# for AREA in safety truthfulness fairness privacy
+#     do
+#     echo $AREA
+#     areaArray=$AREA[@]
+#     for FILE in ${!areaArray}
+#     do
+#     echo $FILE
+#     DATA_NAME=${FILE%.*}
+#     python src/unified_infer.py \
+#         --engine vllm \
+#         --model_name $model_name \
+#         --output_folder ./result_dirs/trustllm/${AREA}/${DATA_NAME}/ \
+#         --data_name ${DATA_NAME} \
+#         --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
+#         --tensor_parallel_size $num_gpus \
+#         --dtype bfloat16 \
+#         --top_p $TOP_P \
+#         --end_index 16 \
+#         --temperature $TEMP \
+#         --max_tokens $MAX_TOKENS \
+#         --batch_size $batch_size \
+#         --overwrite
+#     done
+#     done
+
 # done 
 # wait 
 # python src/merge_results.py $shards_dir/ $model_pretty_name
@@ -99,7 +101,7 @@ python src/unified_infer.py \
     --dtype bfloat16 \
     --top_p $TOP_P \
     --end_index 10 \
+    --hold_run \
     --temperature $TEMP \
     --max_tokens $MAX_TOKENS \
     --overwrite \ 
-    --hold_run
