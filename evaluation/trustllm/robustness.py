@@ -122,6 +122,7 @@ class RobustnessEval:
         if not save_embedding_local:
             if os.path.exists(save_path):
                 os.remove(save_path)
+        import pdb; pdb.set_trace()
         return metrics.average_cosine_similarity(embeddings)
 
     def ood_detection(self, data, return_data=False):
