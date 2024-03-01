@@ -176,7 +176,7 @@ def save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, f
         for ind in range(len(outputs)):
             output_item = {}
             output_item["prompt"] = chat_history[ind]
-            output_item["res"] = outputs[ind]
+            output_item["res"] = outputs[ind][0]
             output_item["generator"] = args.model_name
             for key in metadata:
                 output_item[key] = metadata[key][ind]
