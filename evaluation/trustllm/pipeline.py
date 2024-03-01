@@ -326,7 +326,7 @@ if __name__ == "__main__":
         fairness_results = run_fairness(
             stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition",args.filename),      
             stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement",args.filename),      
-            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query",args.filename),      
+            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query_test",args.filename),      
             disparagement_path=os.path.join(args.fairness_dir,"disparagement",args.filename),      
             preference_path=os.path.join(args.fairness_dir,"preference",args.filename)   
         ) 
