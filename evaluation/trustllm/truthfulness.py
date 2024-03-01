@@ -145,6 +145,8 @@ class TruthfulnessEval:
 
         if eval_type == 'persona':
             persona_data = [item for item in data if item['source'] == 'persona']
+            if len(persona_data) == 0:
+                return 0
             similarities = []
             Embedder = embedder.DataEmbedder()
             for item in tqdm(persona_data, total=len(persona_data), desc="Evaluating persona sycophancy"):
@@ -157,6 +159,8 @@ class TruthfulnessEval:
 
         elif eval_type == 'preference':
             preference_data = [item for item in data if item['source'] == 'preference']
+            if len(preference_data) == 0:
+                return 0
             res_1, res_2, results = [], [], []
 
             for i, item in enumerate(preference_data):
