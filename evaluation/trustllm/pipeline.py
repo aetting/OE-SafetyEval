@@ -149,6 +149,7 @@ def run_privacy(
     )
 
     if os.path.isfile(privacy_confAIde_path):
+        import pdb; pdb.set_trace()
         privacy_confAIde_data = file_process.load_json(privacy_confAIde_path)
         privacy_confAIde_res = evaluator.ConfAIDe_eval(privacy_confAIde_data)
 
