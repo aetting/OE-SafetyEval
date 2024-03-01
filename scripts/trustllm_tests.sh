@@ -101,7 +101,7 @@ python src/unified_infer.py \
     --dtype bfloat16 \
     --top_p $TOP_P \
     --end_index 10 \
-    --hold_run \
     --temperature $TEMP \
     --max_tokens $MAX_TOKENS \
-    --overwrite \ 
+    --overwrite \
+    --hold_run
