@@ -214,6 +214,14 @@ def run_truthfulness(
     if os.path.isfile(hallucination_path):
         hallucination_data = file_process.load_json(hallucination_path)
         hallucination_res = evaluator.hallucination_eval(hallucination_data)
+    
+    openai_msg2 = [{"role":"system", "content":"You are an AI assistant that helps people find information."},{"role":"user", "content":"Make me a cake please."}]
+    import openai
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0125",
+        messages=openai_msg2
+    )
+    print(response)
 
     print("sycophancy eval------")
     if os.path.isfile(sycophancy_path):
@@ -302,14 +310,6 @@ if __name__ == "__main__":
     parser.add_argument('--ethics_dir', type=str, default="")
     parser.add_argument('--filename', type=str, default=None)
     args = parser.parse_args()
-
-    openai_msg2 = [{"role":"system", "content":"You are an AI assistant that helps people find information."},{"role":"user", "content":"Make me a cake please."}]
-    import openai
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0125",
-        messages=openai_msg2
-    )
-    print(response)
     
     if args.truthfulness_dir:
         truthfulness_results = run_truthfulness(  
