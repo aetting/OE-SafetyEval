@@ -2,8 +2,8 @@ import openai
 import os
 import logging
 from tqdm import tqdm
-import trustllm.config
-from trustllm.utils import file_process
+# import trustllm.config
+from utils import file_process
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
 # Configure basic logging
@@ -26,7 +26,7 @@ class DataEmbedder:
             os.makedirs(self.save_dir)
         # openai.api_key = trustllm.config.openai_key
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        trustllm.config.azure_openai = False
+        # trustllm.config.azure_openai = False
         import pdb; pdb.set_trace()
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(6))
