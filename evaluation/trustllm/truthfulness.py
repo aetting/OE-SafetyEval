@@ -32,7 +32,6 @@ class TruthfulnessEval:
         # Prepare final predictions and gold labels
         predictions, gold_labels = self.prepare_labels(raw_predictions, answers)
         assert len(predictions) == len(gold_labels) != 0
-        import pdb; pdb.set_trace()
         # Generate and return the classification report score
         return self.generate_report(gold_labels, predictions)
 
