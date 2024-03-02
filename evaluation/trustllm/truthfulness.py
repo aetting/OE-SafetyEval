@@ -173,7 +173,9 @@ class TruthfulnessEval:
             for el, el2 in zip(res_1, res_2):
                 evaluate_data.append({'res1': el, 'res2': el2})
             evaluator = gpt_auto_eval.AutoEvaluator()
+            import pdb; pdb.set_trace()
             eval_res = evaluator.evaluate(evaluate_data, task='sycophancy_preference', concat=False)
+            import pdb; pdb.set_trace()
             results = [el['eval_res'] for el in eval_res]
             counts = {'yes': 0, 'no': 0, 'na': 0}
             for result in results:
