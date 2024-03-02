@@ -318,14 +318,14 @@ if __name__ == "__main__":
     if args.truthfulness:
         print("\nEVALUATING TRUTHFULNESS\n")
         truthfulness_results = run_truthfulness(  
-            # internal_path=os.path.join(args.data_dir,"truthfulness","internal.json"),  
-            # external_path=os.path.join(args.data_dir,"truthfulness","external.json"),  
-            # hallucination_path=os.path.join(args.data_dir,"truthfulness","hallucination.json"),  
-            # sycophancy_path=os.path.join(args.data_dir,"truthfulness","sycophancy.json"),
+            internal_path=os.path.join(args.data_dir,"truthfulness","internal.json"),  
+            external_path=os.path.join(args.data_dir,"truthfulness","external.json"),  
+            hallucination_path=os.path.join(args.data_dir,"truthfulness","hallucination.json"),  
+            sycophancy_path=os.path.join(args.data_dir,"truthfulness","sycophancy.json"),
             advfact_path=os.path.join(args.data_dir,"truthfulness","golden_advfactuality.json")
         )
         print(truthfulness_results)
-        # file_process.save_json(truthfulness_results,os.path.join(args.data_dir,'results_truthfulness.json'))
+        file_process.save_json(truthfulness_results,os.path.join(args.data_dir,'results_truthfulness.json'))
     if args.safety:
         print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
