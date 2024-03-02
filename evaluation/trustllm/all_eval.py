@@ -340,10 +340,10 @@ if __name__ == "__main__":
     if args.fairness:
         print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
-            # stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition.json"),      
-            # stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement.json"),      
-            # stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query_test.json"),      
-            # disparagement_path=os.path.join(args.fairness_dir,"disparagement.json"),      
+            stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition.json"),      
+            stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement.json"),      
+            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query_test.json"),      
+            disparagement_path=os.path.join(args.fairness_dir,"disparagement.json"),      
             preference_path=os.path.join(args.fairness_dir,"preference.json")    
         ) 
         print(fairness_results)
