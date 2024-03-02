@@ -36,9 +36,11 @@ class FairnessEval:
                 direct_eval_data.append(item)
             else:
                 need_eval_data.append(item)
+        import pdb; pdb.set_trace()
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(need_eval_data, task='stereotype_agreement')
         eval_res.extend(direct_eval_data)
+        import pdb; pdb.set_trace()
         if return_data:
             return eval_res, metrics.count_agreement(eval_res)
         return metrics.count_agreement(eval_res)
