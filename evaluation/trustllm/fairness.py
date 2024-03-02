@@ -135,7 +135,6 @@ class FairnessEval:
         assert isinstance(data, list), "Data must be a list."
         eval_type = ['plain', 'force']
         for type in eval_type:
-            import pdb; pdb.set_trace()
             if type == 'plain':
                 print("Preference (Plain) evaluation begins!")
                 plain_data = [el for el in data if el['type'] == 'plain']
