@@ -311,69 +311,70 @@ if __name__ == "__main__":
     parser.add_argument('--robustness', action='store_true')
     parser.add_argument('--privacy', action='store_true')
     parser.add_argument('--ethics', action='store_true')
+    parser.add_argument('--data_dir', type=str, default=None)
     # parser.add_argument('--filename', type=str, default=None)
     args = parser.parse_args()
     
     if args.truthfulness:
         print("\nEVALUATING TRUTHFULNESS\n")
         truthfulness_results = run_truthfulness(  
-            internal_path=os.path.join(args.truthfulness_dir,"internal.json"),  
-            external_path=os.path.join(args.truthfulness_dir,"external.json"),  
-            hallucination_path=os.path.join(args.truthfulness_dir,"hallucination.json"),  
-            sycophancy_path=os.path.join(args.truthfulness_dir,"sycophancy.json"),
-            advfact_path=os.path.join(args.truthfulness_dir,"golden_advfactuality.json")
+            internal_path=os.path.join(args.data_dir,"truthfulness","internal.json"),  
+            external_path=os.path.join(args.data_dir,"truthfulness","external.json"),  
+            hallucination_path=os.path.join(args.data_dir,"truthfulness","hallucination.json"),  
+            sycophancy_path=os.path.join(args.data_dir,"truthfulness","sycophancy.json"),
+            advfact_path=os.path.join(args.data_dir,"truthfulness","golden_advfactuality.json")
         )
         print(truthfulness_results)
-        file_process.save_json(truthfulness_results,os.path.join(args.truthfulness_dir,'results_truthfulness.json'))
+        file_process.save_json(truthfulness_results,os.path.join(args.data_dir,'results_truthfulness.json'))
     if args.safety:
         print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
-            jailbreak_path=os.path.join(args.safety_dir,"jailbreak.json"),  
-            exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety.json"),  
-            misuse_path=os.path.join(args.safety_dir,"misuse.json"),  
+            jailbreak_path=os.path.join(args.data_dir,"safety","jailbreak.json"),  
+            exaggerated_safety_path=os.path.join(args.data_dir,"safety","exaggerated_safety.json"),  
+            misuse_path=os.path.join(args.data_dir,"safety","misuse.json"),  
             # toxicity_eval=True,  
             # toxicity_path=os.path.join(args.safety_dir,"toxicity"),  
             jailbreak_eval_type="total"  
         ) 
         print(safety_results)
-        file_process.save_json(safety_results,os.path.join(args.safety_dir,'results_safety.json'))
+        file_process.save_json(safety_results,os.path.join(args.data_dir,'results_safety.json'))
     if args.fairness:
         print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
-            stereotype_recognition_path=os.path.join(args.fairness_dir,"stereotype_recognition.json"),      
-            stereotype_agreement_path=os.path.join(args.fairness_dir,"stereotype_agreement.json"),      
-            stereotype_query_test_path=os.path.join(args.fairness_dir,"stereotype_query_test.json"),      
-            disparagement_path=os.path.join(args.fairness_dir,"disparagement.json"),      
-            preference_path=os.path.join(args.fairness_dir,"preference.json")    
+            stereotype_recognition_path=os.path.join(args.data_dir,"fairness","stereotype_recognition.json"),      
+            stereotype_agreement_path=os.path.join(args.data_dir,"fairness","stereotype_agreement.json"),      
+            stereotype_query_test_path=os.path.join(args.data_dir,"fairness","stereotype_query_test.json"),      
+            disparagement_path=os.path.join(args.data_dir,"fairness","disparagement.json"),      
+            preference_path=os.path.join(args.data_dir,"fairness","preference.json")    
         ) 
         print(fairness_results)
-        file_process.save_json(fairness_results,os.path.join(args.fairness_dir,'results_fairness.json'))
+        file_process.save_json(fairness_results,os.path.join(args.data_dir,'results_fairness.json'))
     if args.robustness:
         print("\nEVALUATING ROBUSTNESS\n")
         robustness_results = run_robustness(  
-            advglue_path=os.path.join(args.robustness_dir,"AdvGLUE.json")  ,  
-            advinstruction_path=os.path.join(args.robustness_dir,"AdvInstruction.json")  ,  
-            ood_detection_path=os.path.join(args.robustness_dir,"ood_detection.json")  ,  
-            ood_generalization_path=os.path.join(args.robustness_dir,"ood_generalization.json") 
+            advglue_path=os.path.join(args.data_dir,"robustness","AdvGLUE.json")  ,  
+            advinstruction_path=os.path.join(args.data_dir,"robustness","AdvInstruction.json")  ,  
+            ood_detection_path=os.path.join(args.data_dir,"robustness","ood_detection.json")  ,  
+            ood_generalization_path=os.path.join(args.data_dir,"robustness","ood_generalization.json") 
         ) 
         print(robustness_results)
-        file_process.save_json(robustness_results,os.path.join(args.robustness_dir,'results_robustness.json'))
+        file_process.save_json(robustness_results,os.path.join(args.data_dir,'results_robustness.json'))
     if args.privacy:
         print("\nEVALUATING PRIVACY\n")
         privacy_results = run_privacy(  
-            privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde.json") ,  
-            privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query.json") ,  
-            privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage.json") 
+            privacy_confAIde_path=os.path.join(args.data_dir,"privacy","privacy_awareness_confAIde.json") ,  
+            privacy_awareness_query_path=os.path.join(args.data_dir,"privacy","privacy_awareness_query.json") ,  
+            privacy_leakage_path=os.path.join(args.data_dir,"privacy","privacy_leakage.json") 
         ) 
         print(privacy_results)
-        file_process.save_json(privacy_results,os.path.join(args.privacy_dir,'results_privacy.json'))
+        file_process.save_json(privacy_results,os.path.join(args.data_dir,'results_privacy.json'))
     if args.ethics:
         print("\nEVALUATING ETHICS\n")
         ethics_results = run_ethics(  
-            explicit_ethics_path=os.path.join(args.ethics_dir,"explicit_moralchoice.json"), 
-            implicit_ethics_path_social_norm=os.path.join(args.ethics_dir,"implicit_SocialChemistry101.json"), 
-            implicit_ethics_path_ETHICS=os.path.join(args.ethics_dir,"implicit_ETHICS.json"), 
-            awareness_path=os.path.join(args.ethics_dir,"awareness.json")  
+            explicit_ethics_path=os.path.join(args.data_dir,"ethics","explicit_moralchoice.json"), 
+            implicit_ethics_path_social_norm=os.path.join(args.data_dir,"ethics","implicit_SocialChemistry101.json"), 
+            implicit_ethics_path_ETHICS=os.path.join(args.data_dir,"ethics","implicit_ETHICS.json"), 
+            awareness_path=os.path.join(args.data_dir,"ethics","awareness.json")  
         ) 
         print(ethics_results)
-        file_process.save_json(ethics_results,os.path.join(args.ethics_dir,'results_ethics.json'))
+        file_process.save_json(ethics_results,os.path.join(args.data_dir,'results_ethics.json'))
