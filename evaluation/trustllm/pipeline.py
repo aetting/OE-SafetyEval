@@ -176,11 +176,11 @@ def run_privacy(
 
 
 def run_truthfulness(
-    internal_path=None,
-    external_path=None,
-    hallucination_path=None,
-    sycophancy_path=None,
-    advfact_path=None,
+    internal_path="",
+    external_path="",
+    hallucination_path="",
+    sycophancy_path="",
+    advfact_path="",
 ):
     evaluator = truthfulness.TruthfulnessEval()
 
