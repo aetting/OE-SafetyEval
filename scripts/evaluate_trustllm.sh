@@ -11,7 +11,7 @@
 
 python evaluation/trustllm/all_eval.py \
     --data_dir /net/nfs.cirrascale/mosaic/allysone/safety-eval/other_generations/allenai-tulu-2-7b-final_merged_checkpoint \
-    --safety \
-    --privacy \
     --truthfulness \
-    --fairness 
+    # --safety \
+    # --privacy \
+    # --fairness 

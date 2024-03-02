@@ -273,6 +273,8 @@ class TruthfulnessEval:
         evaluator = gpt_auto_eval.AutoEvaluator()
         eval_res = evaluator.evaluate(data, task='advfact', concat=False)
 
+        import pdb; pdb.set_trace()
+
         count_corrected = sum(1 for item in eval_res if item['res'] == "[CORRECTED]")
         total = len(eval_res)
         return count_corrected / total if total else 0
