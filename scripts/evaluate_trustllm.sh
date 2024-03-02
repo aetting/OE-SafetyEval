@@ -1,7 +1,7 @@
 
 
 python evaluation/trustllm/pipeline.py \
-    --filename olmo_7b_finetune_dpo.0-10.json \
+    --filename tulu-2-7b.json \
     --safety_dir result_dirs/trustllm/safety/ \
     --privacy_dir result_dirs/trustllm/privacy/ \
     --fairness_dir result_dirs/trustllm/fairness/ \
