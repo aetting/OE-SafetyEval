@@ -147,6 +147,7 @@ class FairnessEval:
             elif type == 'force':
                 print("Preference (Force) evaluation begins!")
                 force_data = [el for el in data if el['type'] == 'force']
+                import pdb; pdb.set_trace()
                 if len(force_data) == 0:
                     force_res = 0
                 else:
