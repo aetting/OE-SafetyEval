@@ -7,11 +7,9 @@ A unified repo for efficient safety eval
 ```bash
 conda create -n safetyeval python=3.10
 conda activate safetyeval
-pip install vllm==0.3.2
-pip install openai==0.28.0
-pip install datasets tenacity
-# export HF_HOME=/path/to/your/cache_dir/
 ```
+
+See requirements.txt for package versions.
 
 <!-- 
 pip install vllm==0.3.1
