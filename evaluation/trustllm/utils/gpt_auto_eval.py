@@ -13,7 +13,7 @@ logging.basicConfig(filename='autoevaluator.log', level=logging.INFO,
 
 
 # Retry decorator with exponential backoff and stop condition for API calls
-# @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(6))
+@retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(6))
 def get_res(string, model='gpt-4-1106-preview', temp=0):
     """
     Retrieve a response from the OpenAI ChatCompletion API.
