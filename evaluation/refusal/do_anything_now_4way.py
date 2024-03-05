@@ -88,7 +88,7 @@ def construct_message(response_df,rubric_type):
             [
                 {
                     'role': 'system',
-                    'content': prompt['sys_prompt']
+                    'content': prompt_types[rubric_type]['sys_prompt']
                 },
                 {
                     'role': 'user',
