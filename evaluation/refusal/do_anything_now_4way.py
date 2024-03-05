@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
 
     responses = responses[['question', 'prediction']]
-    messages = construct_message(responses,aspect=args.aspect)
+    messages = construct_message(responses,args.rubric_type)
 
     ###########################
 
