@@ -167,15 +167,15 @@ if __name__ == "__main__":
         r = gpt(message, model=args.model)
         responses_do_not_answer.append(r)
 
-    with open(args.results_file, "w") as fout:
-        for prompt, response in zip(messages, responses_do_not_answer):
-            fout.write(json.dumps({'evaluation_prompt': prompt,'evaluation_response': response}) + "\n")
+    # with open(args.results_file, "w") as fout:
+    #     for prompt, response in zip(messages, responses_do_not_answer):
+    #         fout.write(json.dumps({'evaluation_prompt': prompt,'evaluation_response': response}) + "\n")
 
     label_dict = {}
     label_list = []
     labels = parse_labels(responses_do_not_answer)
-    label_file = args.results_file.split(".jsonl")[-2]+"-labels.jsonl"
-    with open(label_file, "w") as fout:
+    # label_file = args.results_file.split(".jsonl")[-2]+"-labels.jsonl"
+    with open(args.results_file, "w") as fout:
         for prompt, response, label in zip(messages, responses_do_not_answer, labels):
             fout.write(json.dumps({'evaluation_prompt': prompt,'evaluation_response': response, 'label': label}) + "\n")
             label_list.append(label)
