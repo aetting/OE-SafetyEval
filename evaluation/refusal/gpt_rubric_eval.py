@@ -139,8 +139,8 @@ if __name__ == "__main__":
             if label not in label_dict:
                 label_dict[label] = 0
             label_dict[label] += 1
-        fout.write(json.dumps(label_list) + "\n")
-        fout.write(json.dumps(label_dict))
+        print(label_list)
+        print(label_dict)
 
 
     if args.check_outputs:
