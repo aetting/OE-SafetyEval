@@ -13,8 +13,8 @@ num_gpus=1
 python src/unified_infer.py \
     --model_name $model_name \
     --engine vllm \
-    --output_folder ./result_dirs/refusal/ \
-    --data_file ../../tulu-eval/do_anything_now_data/with_jailbreaks_prompts.json \
+    --output_folder ./result_dirs/refusal/DAN/ \
+    --data_file /net/nfs.cirrascale/mosaic/allysone/tulu-eval/do_anything_now_data/with_jailbreaks_prompts.json \
     --prompt_field prompt \
     --tensor_parallel_size $num_gpus \
     --dtype bfloat16 \
