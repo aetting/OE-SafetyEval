@@ -15,6 +15,7 @@ python src/unified_infer.py \
     --engine openai \
     --output_folder ./result_dirs/refusal/ \
     --data_file ../../tulu-eval/do_anything_now_data/with_jailbreaks_prompts.json \
+    --prompt_field prompt \
     --tensor_parallel_size $num_gpus \
     --dtype bfloat16 \
     --top_p $TOP_P \
