@@ -1,7 +1,7 @@
 from transformers import pipeline, AutoModelForSequenceClassification, AutoTokenizer
 import logging
 import os
-from trustllm.utils import file_process
+from . import file_process
 from tqdm import tqdm
 
 # Configure basic logging

@@ -7,6 +7,10 @@ A unified repo for efficient safety eval
 ```bash
 conda create -n safetyeval python=3.10
 conda activate safetyeval
+pip install vllm==0.3.2
+pip install openai==0.28.0
+pip install datasets tenacity
+pip install scipy scikit-learn google-api-python-client
 ```
 
 See requirements.txt for package versions.

@@ -23,7 +23,8 @@ def parse_args():
     parser.add_argument('--tensor_parallel_size', type=int, default=1)
     parser.add_argument('--dtype', type=str, default="auto")
     parser.add_argument('--tokenizer_mode', type=str, default="auto") 
-    parser.add_argument('--data_name', default="wild_bench", type=str)
+    parser.add_argument('--data_name', default=None, type=str)
+    parser.add_argument('--prompt_field', default="prompt", type=str)
     parser.add_argument('--data_file', default=None, type=str)  
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--num_outputs', default=1, type=int)
@@ -78,7 +79,8 @@ if __name__ == "__main__":
         # Decide the output filepath 
         if "/" in args.model_name and args.model_pretty_name is None:
             args.model_pretty_name = args.model_name.split("/")[-1]   
-        os.system(f"mkdir -p {args.output_folder}")
+        if not os.path.exists(args.output_folder):
+            os.system(f"mkdir -p {args.output_folder}")
         if args.end_index == -1 and args.start_index == 0:
             filepath = f"{args.output_folder}/{args.model_pretty_name}.json"
         else:
@@ -165,7 +167,6 @@ if __name__ == "__main__":
                     openai_msg.append({"role":"user","content": chat_item})
                 else:
                     openai_msg.append({"role":"assistant","content": chat_item})
-            print(openai_msg)
             openai_args = {
                 "model": args.model_pretty_name,
                 "prompt": None,

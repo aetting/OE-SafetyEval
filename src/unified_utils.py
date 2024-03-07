@@ -93,7 +93,7 @@ def load_eval_data(args, data_name=None, model_name=None):
             else:
                 raise ValueError(f"mt_turn {args.mt_turn} not supported; must be 1 or 2")
         elif args.data_file:
-            chat_history.append([item["prompt"]])
+            chat_history.append([item[args.prompt_field]])
         else:
             raise ValueError(f"Data name {data_name} not supported")
         for key in metadata: 
