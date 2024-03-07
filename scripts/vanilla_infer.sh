@@ -13,9 +13,8 @@ num_gpus=1
 python src/unified_infer.py \
     --model_name $model_name \
     --engine openai \
-    --output_folder ./result_dirs/safety/ \
-    --data_name safetyx \
-    --data_file ../../tulu-eval/TrustLLM/dataset/truthfulness/internal.json \
+    --output_folder ./result_dirs/refusal/ \
+    --data_file ../../tulu-eval/do_anything_now_data/with_jailbreaks_prompts.json \
     --tensor_parallel_size $num_gpus \
     --dtype bfloat16 \
     --top_p $TOP_P \
