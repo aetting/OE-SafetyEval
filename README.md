@@ -11,6 +11,7 @@ pip install vllm==0.3.2
 pip install openai==0.28.0
 pip install datasets tenacity
 pip install scipy scikit-learn google-api-python-client
+pip install ai2-olmo
 ```
 
 <!-- 
