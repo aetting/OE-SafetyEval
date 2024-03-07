@@ -103,7 +103,7 @@ def parse_labels(reviews):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="gpt-4-0613", choices=["gpt-4", "gpt-3.5-turbo", "gpt-4-0125-preview"])
+    parser.add_argument("--model", default="gpt-4-0613", choices=["gpt-4-0613","gpt-4", "gpt-3.5-turbo", "gpt-4-0125-preview"])
     parser.add_argument("--output_file", required=True, default=None, help="jsonl file where the inputs and outputs are stored")
     parser.add_argument("--results_file", required=True, default=None, help="path to file where the results will be stored")
     parser.add_argument("--rubric_type", required=True, help="type of prompt/rubric",choices=["do_not_answer", "do_anything_now"])
