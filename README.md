@@ -13,8 +13,6 @@ pip install datasets tenacity
 pip install scipy scikit-learn google-api-python-client
 ```
 
-See requirements.txt for package versions.
-
 <!-- 
 pip install vllm==0.3.1
 pip install openai==0.28.0
