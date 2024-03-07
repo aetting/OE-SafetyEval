@@ -34,10 +34,6 @@ def instance_conversion_truth_external(instance):
     return question, continuations, label
 
 def instance_conversion_hallucination(instance):
-    print('HERE')
-    print(instance['prompt'])
-    # print(instance)
-    # print("----")
     match = re.match(".*Here is the question:\s*(.*)\.\s+Here are the options:\s(.*)",instance['prompt'],re.DOTALL)
     qu,options = match.groups()
     continuations = []
@@ -69,7 +65,7 @@ def instance_conversion_hallucination(instance):
 def get_all_ethics():
     ethics_instances = []
     dataset = access_trustllm("ethics/implicit_ETHICS.json")
-    for idx,instance in enumerate(dataset):
+    for instance in dataset:
         question,continuations,label = instance_conversion_ethics(instance)
         ethics_instances.append({'question': question,'continuations':continuations,'label':label})
     return ethics_instances
@@ -77,7 +73,7 @@ def get_all_ethics():
 def get_all_truth_external():
     external_truth_instances = []
     dataset = access_trustllm("truthfulness/external.json")
-    for idx,instance in enumerate(dataset):
+    for instance in dataset:
         question,continuations,label = instance_conversion_truth_external(instance)
         external_truth_instances.append({'question': question,'continuations':continuations,'label':label})
     return external_truth_instances
@@ -86,7 +82,7 @@ def get_all_hallucination():
     hallucination_instances = []
     dataset = access_trustllm("truthfulness/hallucination.json")
     dataset = dataset.filter(lambda example: example['source'] == 'mc')
-    for idx,instance in enumerate(dataset):
+    for instance in dataset:
         question,continuations,label = instance_conversion_hallucination(instance)
         hallucination_instances.append({'question': question,'continuations':continuations,'label':label})
     return hallucination_instances
