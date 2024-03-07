@@ -117,7 +117,7 @@ if __name__ == "__main__":
         responses = responses.sample(args.num_items)
     print(len(responses))
 
-    responses = responses[['question', 'prediction']]
+    responses = responses[['question', 'res']]
     messages = construct_message(responses,args.rubric_type)
 
     responses_do_not_answer = []
