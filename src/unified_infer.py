@@ -79,7 +79,8 @@ if __name__ == "__main__":
         # Decide the output filepath 
         if "/" in args.model_name and args.model_pretty_name is None:
             args.model_pretty_name = args.model_name.split("/")[-1]   
-        os.system(f"mkdir -p {args.output_folder}")
+        if not os.path.exists(args.output_folder):
+            os.system(f"mkdir -p {args.output_folder}")
         if args.end_index == -1 and args.start_index == 0:
             filepath = f"{args.output_folder}/{args.model_pretty_name}.json"
         else:
