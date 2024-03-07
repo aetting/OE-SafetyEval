@@ -1,10 +1,10 @@
-model_name="allenai/tulu-2-dpo-7b"
+# model_name="allenai/tulu-2-dpo-7b"
 TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
 
 #model_name="/net/nfs.cirrascale/allennlp/hamishi/checkpoints/olmo_7b_finetune_dpo"
 #model_name="/net/nfs.cirrascale/mosaic/allysone/soups/llama2/llama2-7b-chat/llama2-7b-chat-model"
 
-#model_name="allenai/OLMo-7B"
+model_name="allenai/OLMo-7B"
 
 # model_name="openai/gpt-3.5-turbo-0125"
 # TEMP=0; TOP_P=1.0; MAX_TOKENS=2048;
