@@ -1,4 +1,4 @@
-model_name="allenai/tulu-2-dpo-7b"
+model_name="allenai/tulu-2-7b"
 TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
 
 #model_name="/net/nfs.cirrascale/allennlp/hamishi/checkpoints/olmo_7b_finetune_dpo"
@@ -12,7 +12,7 @@ TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
 num_gpus=1
 python src/unified_infer.py \
     --model_name $model_name \
-    --engine hf \
+    --engine vllm \
     --output_folder ./result_dirs/refusal/DAN/jb \
     --data_file /net/nfs.cirrascale/mosaic/allysone/tulu-eval/do_anything_now_data/with_jailbreaks_prompts.json \
     --prompt_field prompt \
