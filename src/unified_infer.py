@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument('--dtype', type=str, default="auto")
     parser.add_argument('--tokenizer_mode', type=str, default="auto") 
     parser.add_argument('--data_name', default=None, type=str)
-    parser.add_argument('--prompt_field', default=None, type=str)
+    parser.add_argument('--prompt_field', default="prompt", type=str)
     parser.add_argument('--data_file', default=None, type=str)  
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--num_outputs', default=1, type=int)
