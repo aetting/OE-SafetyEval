@@ -51,8 +51,7 @@ ethics=(
 
 num_gpus=1
 
-# for AREA in safety privacy fairness truthfulness robustness ethics
-for AREA in ethics
+for AREA in safety fairness truthfulness privacy robustness ethics
     do
     echo $AREA
     areaArray=$AREA[@]
@@ -71,6 +70,7 @@ for AREA in ethics
         --temperature $TEMP \
         --max_tokens $MAX_TOKENS \
         --batch_size $batch_size \
+        --end_index 80 \
         --overwrite
     done
     done
