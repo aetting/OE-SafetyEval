@@ -1,5 +1,5 @@
 
-model_name="allenai/tulu-2-7b"
+model_name="allenai/tulu-2-dpo-7b"
 TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
 batch_size=4
 
@@ -51,7 +51,8 @@ ethics=(
 
 num_gpus=1
 
-for AREA in safety privacy fairness truthfulness robustness ethics
+# for AREA in safety privacy fairness truthfulness robustness ethics
+for AREA in privacy
     do
     echo $AREA
     areaArray=$AREA[@]
