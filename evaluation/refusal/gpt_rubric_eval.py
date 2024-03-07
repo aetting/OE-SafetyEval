@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    responses = pd.read_json(args.output_file, lines=True)
+    responses = pd.read_json(args.output_file)
     if args.num_items is not None:
         responses = responses.sample(args.num_items)
     print(len(responses))
