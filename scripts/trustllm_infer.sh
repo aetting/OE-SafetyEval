@@ -52,7 +52,7 @@ ethics=(
 num_gpus=1
 
 # for AREA in safety privacy fairness truthfulness robustness ethics
-for AREA in safety
+for AREA in ethics
     do
     echo $AREA
     areaArray=$AREA[@]
