@@ -167,7 +167,6 @@ if __name__ == "__main__":
                     openai_msg.append({"role":"user","content": chat_item})
                 else:
                     openai_msg.append({"role":"assistant","content": chat_item})
-            print(openai_msg)
             openai_args = {
                 "model": args.model_pretty_name,
                 "prompt": None,
