@@ -66,25 +66,35 @@ def instance_conversion_hallucination(instance):
 
     return question, continuations, label
 
-
-if __name__ == "__main__":
+def get_all_ethics():
     ethics_instances = []
     dataset = access_trustllm("ethics/implicit_ETHICS.json")
     for idx,instance in enumerate(dataset):
         question,continuations,label = instance_conversion_ethics(instance)
         ethics_instances.append({'question': question,'continuations':continuations,'label':label})
+    return ethics_instances
 
+def get_all_truth_external():
     external_truth_instances = []
     dataset = access_trustllm("truthfulness/external.json")
     for idx,instance in enumerate(dataset):
         question,continuations,label = instance_conversion_truth_external(instance)
         external_truth_instances.append({'question': question,'continuations':continuations,'label':label})
-    
+    return external_truth_instances
+
+def get_all_hallucination():
     hallucination_instances = []
     dataset = access_trustllm("truthfulness/hallucination.json")
     dataset = dataset.filter(lambda example: example['source'] == 'mc')
     for idx,instance in enumerate(dataset):
         question,continuations,label = instance_conversion_hallucination(instance)
         hallucination_instances.append({'question': question,'continuations':continuations,'label':label})
+    return hallucination_instances
+
+
+if __name__ == "__main__":
     
+    ethics_instances = get_all_ethics()
+    external_truth_instances = get_all_truth_external()
+    hallucination_instances = get_all_hallucination()
 
