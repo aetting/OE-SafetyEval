@@ -161,6 +161,8 @@ cython_debug/
 #.idea/
 evaluation/results/
 
+result_dirs/
+
 .DS_Store
 result_dirs/alpaca_eval/hf_example_test.json
 result_dirs/alpaca_eval/tmp_hf_example_test/hf_example_test.json
