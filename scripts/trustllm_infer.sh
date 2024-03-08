@@ -51,26 +51,31 @@ ethics=(
 
 num_gpus=1
 
-for AREA in safety fairness truthfulness privacy robustness ethics
+for MODELNAME in mistralai/Mistral-7B-Instruct-v0.2 allenai/tulu-2-dpo-7b allenai/tulu-2-7b 
     do
-    echo $AREA
-    areaArray=$AREA[@]
-    for FILE in ${!areaArray}
-    do
-    echo $FILE
-    DATA_NAME=${FILE%.*}
-    python src/unified_infer.py \
-        --engine vllm \
-        --model_name $model_name \
-        --output_folder ./result_dirs/trustllm/${AREA}/${DATA_NAME}/ \
-        --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
-        --tensor_parallel_size $num_gpus \
-        --dtype bfloat16 \
-        --top_p $TOP_P \
-        --temperature $TEMP \
-        --max_tokens $MAX_TOKENS \
-        --batch_size $batch_size \
-        --end_index 80 \
-        --overwrite
-    done
+    echo $MODELNAME
+
+    for AREA in safety fairness truthfulness privacy robustness ethics
+        do
+        echo $AREA
+        areaArray=$AREA[@]
+        for FILE in ${!areaArray}
+        do
+        echo $FILE
+        DATA_NAME=${FILE%.*}
+        python src/unified_infer.py \
+            --engine vllm \
+            --model_name $MODELNAME \
+            --output_folder ../result_dirs/trustllm/${AREA}/${DATA_NAME}/ \
+            --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
+            --tensor_parallel_size $num_gpus \
+            --dtype bfloat16 \
+            --top_p $TOP_P \
+            --temperature $TEMP \
+            --max_tokens $MAX_TOKENS \
+            --batch_size $batch_size \
+            --end_index 8 \
+            --overwrite
+        done
+        done
     done
