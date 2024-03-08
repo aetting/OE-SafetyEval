@@ -130,9 +130,9 @@ if __name__ == "__main__":
         for cur_id in tqdm(range(0, len(todo_inputs), args.batch_size), desc=f"Generating {args.model_name} from {args.start_index} to {args.end_index}"):
             batch_inputs = todo_inputs[cur_id:cur_id+args.batch_size]
             batch_outputs = llm.generate(batch_inputs, sampling_params, use_tqdm=False)
-            import pdb; pdb.set_trace()
             outputs.extend([[o.text for o in x.outputs] for x in batch_outputs]) # TODO: enbale multiple generation 
             save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
+        import pdb; pdb.set_trace()
         save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
         
     elif args.engine == "hf":
