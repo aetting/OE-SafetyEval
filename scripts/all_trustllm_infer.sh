@@ -109,7 +109,7 @@ end_index=4
 TEMP=0; TOP_P=1.0; MAX_TOKENS=2048;
 python src/unified_infer.py \
     --engine vllm \
-    --model_name allenai/tulu-2-7b \
+    --model_name /net/nfs.cirrascale/allennlp/hamishi/checkpoints/olmo_7b_finetune_dpo \
     --output_folder ../result_dirs/trustllm/safety/jailbreak/ \
     --data_file ../../tulu-eval/TrustLLM/dataset/safety/jailbreak.json \
     --tensor_parallel_size 1 \
