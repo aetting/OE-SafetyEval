@@ -51,7 +51,7 @@ ethics=(
 
 num_gpus=1
 
-models=( "allenai/tulu-2-dpo-7b" "allenai/tulu-2-dpo-7b" )
+models=( "allenai/tulu-2-7b" "allenai/tulu-2-dpo-7b" )
 gpus=( 0 1 2 3 )
 
 # for AREA in safety fairness truthfulness privacy robustness ethics; do
@@ -77,8 +77,8 @@ for AREA in safety; do
             --temperature $TEMP \
             --max_tokens $MAX_TOKENS \
             --batch_size $batch_size \
-            --end_index 8 \
-            --overwrite &
+            --end_index 4 \
+            --overwrite
         done
     done
 done
