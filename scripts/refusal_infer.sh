@@ -9,7 +9,7 @@ TEMP=0; TOP_P=1.0; MAX_TOKENS=512;
 # model_name="openai/gpt-3.5-turbo-0125"
 # TEMP=0; TOP_P=1.0; MAX_TOKENS=2048;
 
-gpu="0,1,2,3";num_gpus=2
+gpu="0,1,2,3";num_gpus=4
 
 CUDA_VISIBLE_DEVICES=$gpu \
 python src/unified_infer.py \
@@ -24,4 +24,4 @@ python src/unified_infer.py \
     --end_index 4 \
     --temperature $TEMP \
     --max_tokens $MAX_TOKENS \
-    --overwrite
+    --overwrite &
