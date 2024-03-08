@@ -51,21 +51,24 @@ ethics=(
 
 num_gpus=1
 
-for MODELNAME in mistralai/Mistral-7B-Instruct-v0.2 allenai/tulu-2-dpo-7b allenai/tulu-2-7b 
-    do
-    echo $MODELNAME
+models=( "allenai/tulu-2-dpo-7b" "allenai/tulu-2-dpo-7b" )
+gpus=( 0 1 2 3 )
 
-    for AREA in safety fairness truthfulness privacy robustness ethics
-        do
-        echo $AREA
-        areaArray=$AREA[@]
-        for FILE in ${!areaArray}
-        do
+# for AREA in safety fairness truthfulness privacy robustness ethics; do
+for AREA in safety; do
+    echo $AREA
+    areaArray=$AREA[@]
+    for FILE in ${!areaArray}; do
         echo $FILE
         DATA_NAME=${FILE%.*}
+        for i in "${!models[@]}"; do 
+        model="${models[i]}"
+        gpu="${gpus[i]}"
+        echo $gpu
+        CUDA_VISIBLE_DEVICES=$gpu \
         python src/unified_infer.py \
             --engine vllm \
-            --model_name $MODELNAME \
+            --model_name $model \
             --output_folder ../result_dirs/trustllm/${AREA}/${DATA_NAME}/ \
             --data_file ../../tulu-eval/TrustLLM/dataset/${AREA}/${FILE} \
             --tensor_parallel_size $num_gpus \
@@ -75,7 +78,8 @@ for MODELNAME in mistralai/Mistral-7B-Instruct-v0.2 allenai/tulu-2-dpo-7b allena
             --max_tokens $MAX_TOKENS \
             --batch_size $batch_size \
             --end_index 8 \
-            --overwrite
-        done
+            --overwrite &
         done
     done
+done
+
