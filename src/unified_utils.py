@@ -31,7 +31,7 @@ def apply_template(chat_history, model_name):
  
 def load_eval_data(args, data_name=None, model_name=None):
     if data_name is None:
-        data_name = args.data_name
+        data_name = args.data_file
     if model_name is None:
         model_name = args.model_name    
     chat_history = []
