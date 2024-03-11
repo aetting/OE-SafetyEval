@@ -12,6 +12,7 @@ pip install openai==0.28.0
 pip install datasets tenacity
 pip install scipy scikit-learn google-api-python-client
 pip install ai2-olmo
+pip install accelerate
 ```
 
 <!-- 
