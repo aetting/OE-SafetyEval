@@ -78,7 +78,7 @@ for AREA in safety; do
             --max_tokens $MAX_TOKENS \
             --batch_size $batch_size \
             --end_index 4 \
-            --overwrite
+            --overwrite &
         done
     done
 done
