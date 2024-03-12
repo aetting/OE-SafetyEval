@@ -1,11 +1,12 @@
 
 
-python evaluation/trustllm/pipeline.py \
-    --filename tulu-2-dpo-7b.0-80.json \
-    --fairness_dir result_dirs/trustllm/fairness/ \
-    --truthfulness_dir result_dirs/trustllm/truthfulness/ \
-    --privacy_dir result_dirs/trustllm/privacy/ \
-    --safety_dir result_dirs/trustllm/safety/ \
-    --truthfulness_dir result_dirs/trustllm/truthfulness/ \
-    --robustness_dir result_dirs/trustllm/robustness/ \
-    --ethics_dir result_dirs/trustllm/ethics/ \ 
+result_dir=/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs
+for FILE in tulu-2-7b.json tulu-2-dpo-7b tulu-2-13b.json tulu-2-dpo-13b tulu-2-dpo-70b; do
+    python evaluation/trustllm/pipeline.py \
+        --filename $FILE \
+        --fairness_dir ${result_dir}/trustllm/fairness/ \
+        --truthfulness_dir ${result_dir}/trustllm/truthfulness/ \
+        --privacy_dir ${result_dir}/trustllm/privacy/ \
+        --safety_dir ${result_dir}/trustllm/safety/ \
+        --truthfulness_dir ${result_dir}/trustllm/truthfulness/
+done
