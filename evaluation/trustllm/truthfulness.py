@@ -313,7 +313,6 @@ class TruthfulnessEval:
         dict: A dictionary containing evaluation results for the SQuAD dataset.
         """
         print("squad")
-        import pdb; pdb.set_trace()
         squad_data = [item for item in data if item['source'] == 'squad']
         if len(squad_data) == 0:
             return 0
