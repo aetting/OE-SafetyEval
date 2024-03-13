@@ -285,6 +285,7 @@ class TruthfulnessEval:
         Returns:
         float: The accuracy of the evaluation based on the CODAH dataset.
         """
+        print("codah")
         codah_data = [item for item in data if item['source'] == 'codah']
         if len(codah_data) == 0:
             return 0
@@ -311,6 +312,8 @@ class TruthfulnessEval:
         Returns:
         dict: A dictionary containing evaluation results for the SQuAD dataset.
         """
+        print("squad")
+        import pdb; pdb.set_trace()
         squad_data = [item for item in data if item['source'] == 'squad']
         if len(squad_data) == 0:
             return 0
@@ -329,6 +332,7 @@ class TruthfulnessEval:
         Returns:
         dict: A dictionary containing evaluation results for adversarial data.
         """
+        print("adv")
         adv_data = [item for item in data if item['source'] == 'adversarial']
         if len(adv_data) == 0:
             return 0
@@ -349,6 +353,7 @@ class TruthfulnessEval:
         Returns:
         dict: A dictionary containing evaluation results for the HotpotQA dataset.
         """
+        print("hotpot")
         hotpot_data = [item for item in data if item['source'] == 'hotpot']
         if len(hotpot_data) == 0:
             return 0

@@ -200,6 +200,8 @@ def run_truthfulness(
         None,
     )
 
+    print("internal eval-------")
+
     if os.path.isfile(internal_path):
         internal_data = file_process.load_json(internal_path)
         internal_res = evaluator.internal_eval(internal_data)
