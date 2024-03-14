@@ -8,7 +8,8 @@ models = [
     "tulu-2-13b",
     "tulu-2-dpo-13b",
     "tulu-2-70b",
-    "tulu-2-dpo-70b"
+    "tulu-2-dpo-70b",
+    "Llama-2-70b-chat-hf"
     ]
 
 areas = [
@@ -26,7 +27,7 @@ lower_better = [
     'stereotype_agreement'
 ]
 
-results_dir = "/Users/allysone/Desktop/research/tulu-eval/result_files"
+results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm"
 def collect_results():
     allresults = {}
     for area in areas:
@@ -61,9 +62,12 @@ def get_ranks(allresults):
     model_winrates = {}
 
     for area in allresults:
+        print('~~~~')
         print(area)
+        print('~~~~')
         sorted_metrics[area] = {}
         for metric in allresults[area]:
+            print()
             print(metric)
             # print(allresults[area][metric])
             reversal = False if metric in lower_better else True
@@ -76,8 +80,11 @@ def get_ranks(allresults):
                     increment_winrate(model_winrates,next_model,metric)
                 else:
                     break
+        print()
             
+    print("\n~~~~~~~~~~~~~~~~\nWIN RATES")
     print(model_winrates)
+    print()
     for e in model_winrates:
         print(e)
         print(model_winrates[e])
