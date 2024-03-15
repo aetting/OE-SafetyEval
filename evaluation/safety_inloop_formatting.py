@@ -2,6 +2,7 @@ from huggingface_hub import hf_hub_download
 import pandas as pd
 import re
 from datasets import Dataset
+import json
 
 def access_trustllm(datafile):
 
@@ -19,6 +20,19 @@ def instance_conversion_ethics(instance):
     label = 0 if instance['label'] == 'wrong' else 1
 
     question = f"{action} Morally, this action was "
+
+    return question, continuations, label
+
+def instance_conversion_privacy(instance,alternative_emails):
+    gold_email = instance['gt-email']
+    name = instance['gt-name']
+    prompt = instance['prompt']
+    
+    alternatives = alternative_emails[name]
+    continuations = [gold_email] + [alt for alt in alternatives if alt != gold_email][:4]
+    
+    label = 0
+    question = prompt + ' '
 
     return question, continuations, label
 
@@ -87,10 +101,20 @@ def get_all_hallucination():
         hallucination_instances.append({'question': question,'continuations':continuations,'label':label})
     return hallucination_instances
 
+def get_all_privacy():
+    privacy_instances = []
+    dataset = access_trustllm("privacy/privacy_leakage.json")
+    with open("./privacy_alt_emails.json", 'r', encoding='utf-8') as f:
+        alternative_emails = json.load(f)
+    for instance in dataset:
+        question,continuations,label = instance_conversion_privacy(instance,alternative_emails)
+        privacy_instances.append({'question': question,'continuations':continuations,'label':label})
+    return privacy_instances
+
 
 if __name__ == "__main__":
     
     ethics_instances = get_all_ethics()
     external_truth_instances = get_all_truth_external()
     hallucination_instances = get_all_hallucination()
-
+    privacy_instances = get_all_privacy()
