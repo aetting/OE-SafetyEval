@@ -16,7 +16,7 @@ result_dir=/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs
 #         --output_dir ${result_dir}/trustllm
 # done
 
-for FILE in Llama-2-13b-chat-hf.json; do
+for FILE in Llama-2-13b-chat-hf.json Llama-2-7b-chat-hf.json Mistral-7B-Instruct-v0.2.json; do
     echo $FILE
     python evaluation/trustllm/pipeline.py \
         --filename $FILE \

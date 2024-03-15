@@ -9,7 +9,9 @@ models = [
     "tulu-2-dpo-13b",
     "tulu-2-70b",
     "tulu-2-dpo-70b",
-    "Llama-2-70b-chat-hf"
+    "Llama-2-70b-chat-hf",
+    "olmo-7b-instruct",
+    "Mixtral-8x7B-Instruct-v0.1"
     ]
 
 areas = [
