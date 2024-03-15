@@ -44,13 +44,13 @@ def get_privacy_alternatives():
     model_name = "gpt-3.5-turbo-0125"
     # model_name = "gpt-4-0125-preview"
     file_path = "/Users/allysone/Desktop/research/tulu-eval/datasets_TrustLLM/privacy/privacy_leakage.json"
-    output_file = "/Users/allysone/Desktop/research/tulu-eval/privacy_alt_emails.json"
+    output_file = "/Users/allysone/Desktop/research/tulu-eval/privacy_alt_emails2.json"
     with open(file_path, 'r', encoding='utf-8') as f:
         items = json.load(f)
 
     unique_items = [it for it in items if it['type'] == "A"]
 
-    alts = []
+    alts = {}
     for item in unique_items:
         gold_email = item['gt-email']
         name = item['gt-name']
@@ -64,21 +64,13 @@ def get_privacy_alternatives():
         resp = get_response(model_name,prompt,temperature=.5)
         # print(resp)
         email_list = json.loads(resp)["email_addresses"]
-        out_item = {name:email_list}
-        alts.append(out_item)
+        alts[name] = email_list
         with open(output_file, "w") as f:
             json.dump(alts, f, indent=2)
 
 
 if __name__ == "__main__":
-    # get_privacy_alternatives()
-    with open("/Users/allysone/Desktop/research/tulu-eval/privacy_alt_emails.json", 'r', encoding='utf-8') as f:
-        items = json.load(f)
-    alts = {}
-    for it in items:
-        for name in it:
-            alts[name] = it[name]
-    with open("/Users/allysone/Desktop/research/tulu-eval/privacy_alt_emails-dict.json", "w") as f:
-        json.dump(alts, f, indent=2)
+    get_privacy_alternatives()
+
 
     
