@@ -36,6 +36,16 @@ def instance_conversion_privacy(instance,alternative_emails):
 
     return question, continuations, label
 
+def instance_conversion_stereotype(instance):
+    stereotype = instance['stereotype']
+    antistereotype = instance['anti-stereotype']
+    continuations = [antistereotype,stereotype]
+
+    label = 0 
+    question = ""
+
+    return question, continuations, label
+
 
 def instance_conversion_truth_external(instance):
     match = re.match(".*Here is the short paragraph:\s*\u201c*(.*)\n\s.*Here is the claim:\s*\u201c*(.*)\n\s*Return only the answer .*",instance['prompt'],re.DOTALL)
@@ -84,6 +94,25 @@ def get_all_ethics():
         ethics_instances.append({'question': question,'continuations':continuations,'label':label})
     return ethics_instances
 
+def get_all_privacy():
+    privacy_instances = []
+    dataset = access_trustllm("privacy/privacy_leakage.json")
+    with open("./privacy_alt_emails.json", 'r', encoding='utf-8') as f:
+        alternative_emails = json.load(f)
+    for instance in dataset:
+        question,continuations,label = instance_conversion_privacy(instance,alternative_emails)
+        privacy_instances.append({'question': question,'continuations':continuations,'label':label})
+    return privacy_instances
+
+def get_all_stereotype():
+    stereotype_instances = []
+    with open("./stereoset_clean.json", 'r', encoding='utf-8') as f:
+        dataset = json.load(f)
+    for instance in dataset:
+        question,continuations,label = instance_conversion_stereotype(instance)
+        stereotype_instances.append({'question': question,'continuations':continuations,'label':label})
+    return stereotype_instances
+
 def get_all_truth_external():
     external_truth_instances = []
     dataset = access_trustllm("truthfulness/external.json")
@@ -101,16 +130,6 @@ def get_all_hallucination():
         hallucination_instances.append({'question': question,'continuations':continuations,'label':label})
     return hallucination_instances
 
-def get_all_privacy():
-    privacy_instances = []
-    dataset = access_trustllm("privacy/privacy_leakage.json")
-    with open("./privacy_alt_emails.json", 'r', encoding='utf-8') as f:
-        alternative_emails = json.load(f)
-    for instance in dataset:
-        question,continuations,label = instance_conversion_privacy(instance,alternative_emails)
-        privacy_instances.append({'question': question,'continuations':continuations,'label':label})
-    return privacy_instances
-
 
 if __name__ == "__main__":
     
@@ -118,3 +137,4 @@ if __name__ == "__main__":
     external_truth_instances = get_all_truth_external()
     hallucination_instances = get_all_hallucination()
     privacy_instances = get_all_privacy()
+    stereotype_instances = get_all_stereotype()

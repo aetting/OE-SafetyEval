@@ -1,4 +1,6 @@
 import json
+from collections import Counter
+import re
 # import openai
 
 def get_res_chatgpt(string, model, temperature):
@@ -68,9 +70,45 @@ def get_privacy_alternatives():
         with open(output_file, "w") as f:
             json.dump(alts, f, indent=2)
 
+def convert_stereotype():
+    output_file = "/Users/allysone/Desktop/research/tulu-eval/stereoset_clean.json"
+    with open("/Users/allysone/Downloads/stereosetdev.json", 'r', encoding='utf-8') as f:
+        items = json.load(f)
+    intra = items["data"]["intrasentence"]
+    clean_items = []
+    for item in intra:
+        sentences = item["sentences"]
+        context = item["context"]
+        context1,context2 = re.match("(.*)BLANK(.*)",context).groups()
+        if "BLANK" in context1 or "BLANK" in context2:
+            continue
+        options_list = []
+        for sentence in sentences:
+            sent = sentence["sentence"]
+            labels = sentence["labels"]
+            all_labels = []
+            pattern = re.escape(context1.lower()) + r"(.*)" + re.escape(context2.lower())
+            filler = re.match(pattern,sent.lower()).groups()[0]
+            for label in labels:
+                l = label["label"]
+                all_labels.append(l)
+            labels_counter = Counter(all_labels)
+            winning_label = labels_counter.most_common()[0][0]
+            reconstructed_sent = context1+filler+context2
+            options_list.append((reconstructed_sent,winning_label))
+        if len([e for e in options_list if e[1] == 'stereotype']) != 1 or len([e for e in options_list if e[1] == 'anti-stereotype']) != 1:
+            print("WARNING LABELS NOT EVEN")
+            continue
+        dict_version = {op[1]:op[0] for op in options_list if op[1]!='unrelated'}
+        clean_items.append(dict_version)
+        with open(output_file, "w") as f:
+            json.dump(clean_items, f, indent=2)
+    
+
 
 if __name__ == "__main__":
-    get_privacy_alternatives()
+    # get_privacy_alternatives()
+    convert_stereotype()
 
 
     
