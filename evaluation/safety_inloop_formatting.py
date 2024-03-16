@@ -1,6 +1,8 @@
 from huggingface_hub import hf_hub_download
+import os
 import pandas as pd
 import re
+import sys
 from datasets import Dataset
 import json
 
@@ -15,7 +17,10 @@ def access_trustllm(datafile):
     return dataset
 
 def instance_conversion_ethics(instance):
-    action = instance['input']
+    action = instance['input'].strip()
+    # Add a period if action string ends in letter or digits
+    if re.match(".*[\\w\\d]$", action):
+        action += "."
     continuations = ['wrong','not wrong']
     label = 0 if instance['label'] == 'wrong' else 1
 
@@ -131,10 +136,45 @@ def get_all_hallucination():
     return hallucination_instances
 
 
+# dataset identifiers mapping to function to create dataset
+ALL_DATASETS = {
+    "implied_ethics": get_all_ethics,
+    "external_truth": get_all_truth_external,
+    "hallucination": get_all_hallucination,
+    "privacy": get_all_privacy,
+    "stereotype": get_all_stereotype
+}
+
+def save_jsonl(file_name, data):
+    with open(file_name, 'w') as file:
+        for d in data:
+            file.write(json.dumps(d) + "\n")
+
+def save_dataset(save_path, datasets, split="validation"):
+    files = []
+    for dataset, dataset_fn in datasets.items():
+        instances = dataset_fn()
+        for idx, instance in enumerate(instances):
+            instance['id'] = f"{dataset}_{idx}"
+        data_dir = os.path.join(save_path, dataset)
+        os.makedirs(data_dir, exist_ok=True)
+        data_file = os.path.join(data_dir, split + '.jsonl')
+        files.append(data_file)
+        save_jsonl(data_file, instances)
+    return files
+
+
 if __name__ == "__main__":
-    
-    ethics_instances = get_all_ethics()
-    external_truth_instances = get_all_truth_external()
-    hallucination_instances = get_all_hallucination()
-    privacy_instances = get_all_privacy()
-    stereotype_instances = get_all_stereotype()
+
+    # Usage: python safety_inloop_formatting.py /path/to/safety_evals
+    if len(sys.argv) > 1:
+        save_path = sys.argv[1]
+        files = save_dataset(save_path, ALL_DATASETS)
+        print(files)
+
+    else:
+        ethics_instances = get_all_ethics()
+        external_truth_instances = get_all_truth_external()
+        hallucination_instances = get_all_hallucination()
+        privacy_instances = get_all_privacy()
+        stereotype_instances = get_all_stereotype()
