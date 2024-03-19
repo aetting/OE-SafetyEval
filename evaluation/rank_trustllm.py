@@ -3,6 +3,7 @@ import json
 import scipy
 import pandas as pd
 import matplotlib.pyplot as plt
+import re
 
 
 models = [
@@ -182,6 +183,28 @@ def plot_jb_categories(models,filetitle):
     # fig.suptitle("Jailbreak performance breakdown")
     fig.savefig(f"/Users/allysone/Desktop/research/tulu-eval/result_files/{filetitle}.png")
     # plt.show()
+
+def plot_leakage_categories(models,filter,modelclass):
+    all_leakage = {}
+    for model in models:
+        rfile = f"/Users/allysone/Desktop/research/tulu-eval/result_files/results_privacy_{model}-lkbd.json"
+        with open(rfile) as f:
+            results = json.load(f)
+        all_leakage[model] = results['privacy_leakage']["type_breakdown"]
+    df = pd.DataFrame(all_leakage).filter(like=filter,axis=0)
+    remap = {e:re.sub('zero-shot','0',e) if 'zero' in e else re.sub('five-shot','5',e) for e in df.index.tolist()}
+    df = df.rename(index=remap)
+    print(df)
+    dfplot = df.plot(kind='bar',subplots=True,rot=45,legend=False,fontsize=8)
+    # fig = dfplot.figure()
+    for ax in dfplot:
+        ax.set_title(label=ax.title.get_text(),size=8)
+    plt.subplots_adjust(hspace=.5)
+    fig = plt.gcf()
+    # fig.tight_layout()
+    # fig.suptitle("Jailbreak performance breakdown")
+    fig.savefig(f"/Users/allysone/Desktop/research/tulu-eval/result_files/leakage_{modelclass}_{filter}.png")
+
     
 
 
@@ -190,6 +213,7 @@ if __name__ == "__main__":
     # model_winrates, model_ranks = get_ranks(allresults)
     # get_spearman(allresults,model_ranks)
 
-    rfile = "/Users/allysone/Desktop/research/tulu-eval/result_files/results_safety_tulu-2-7b-fg.json"
-    plot_jb_categories(models_13b,"13b_jb_breakdown")
+    # plot_jb_categories(models_13b,"13b_jb_breakdown")
+    
+    plot_leakage_categories(models_7b,'RtA','7b')
 
