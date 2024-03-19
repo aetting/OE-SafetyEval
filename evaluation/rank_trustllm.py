@@ -1,5 +1,7 @@
 import os
 import json
+import scipy
+import pandas as pd
 
 
 models = [
@@ -10,9 +12,33 @@ models = [
     "tulu-2-70b",
     "tulu-2-dpo-70b",
     "Llama-2-70b-chat-hf",
+    "Llama-2-7b-chat-hf",
+    "Llama-2-13b-chat-hf",
     "olmo-7b-instruct",
-    "Mixtral-8x7B-Instruct-v0.1"
+    "Mixtral-8x7B-Instruct-v0.1",
+    "Mistral-7B-Instruct-v0.2"
     ]
+
+models_7b = [
+    "tulu-2-7b",
+    "tulu-2-dpo-7b",
+    "Llama-2-7b-chat-hf",
+    "olmo-7b-instruct",
+    "Mistral-7B-Instruct-v0.2"
+    ]
+
+models_13b = [
+    "tulu-2-13b",
+    "tulu-2-dpo-13b",
+    "Llama-2-13b-chat-hf",
+    ]
+
+models_70b = [
+    "tulu-2-70b",
+    "tulu-2-dpo-70b",
+    "Llama-2-70b-chat-hf",
+    "Mixtral-8x7B-Instruct-v0.1"
+]
 
 areas = [
     "privacy",
@@ -30,7 +56,7 @@ lower_better = [
 ]
 
 results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm"
-def collect_results():
+def collect_results(models,areas):
     allresults = {}
     for area in areas:
         allresults[area] = {}
@@ -82,23 +108,58 @@ def get_ranks(allresults):
                     increment_winrate(model_winrates,next_model,metric)
                 else:
                     break
-        print()
+        # print()
             
+    model_winrates = sorted(model_winrates.items(),key=lambda x: x[1]['winrate'],reverse=True)
+    model_ranks = {e[0]:i+1 for i,e in enumerate(model_winrates)}
     print("\n~~~~~~~~~~~~~~~~\nWIN RATES")
     print(model_winrates)
+    print(model_ranks)
     print()
-    for e in model_winrates:
-        print(e)
-        print(model_winrates[e])
+    for model,wins in model_winrates:
+        print(model)
+        for win in wins['won_tasks']: print(win)
         print()
+    return model_winrates,model_ranks
 
-allresults = collect_results()
-get_ranks(allresults)
+def get_spearman(allresults,model_ranks):
+    all_scorelists = []
+    overall_ranklist = []
+    for area in allresults:
+        # print('~~~~')
+        # print(area)
+        # print('~~~~')
+        for metric in allresults[area]:
+            if len(overall_ranklist) == 0:
+                overall_ranklist = [model_ranks[s[0]]*-1 for s in allresults[area][metric]]
+            # print(metric)
+            # print(allresults[area][metric])
+            scores_list = [s[1] for s in allresults[area][metric]]
+            if metric in lower_better:
+                scores_list = [e*-1 for e in scores_list]
+            all_scorelists.append((metric,scores_list))
+    all_correlations = []
+    for m1,l1 in all_scorelists:
+        rho = scipy.stats.spearmanr(l1,overall_ranklist)
+        all_correlations.append((m1,rho.statistic,rho.pvalue))
+    sorted_rho = sorted(all_correlations,key=lambda x: x[2])
+    for item in sorted_rho:
+        print(item)
+    
+def plot_jb_categories(input_file):
+    with open(input_file) as f:
+        results = json.load(f)
+    df = pd.DataFrame(results)
+    print(df)
+    # df.plot()
+    
 
 
+if __name__ == "__main__":
+    # allresults = collect_results(models,areas)
+    # model_winrates, model_ranks = get_ranks(allresults)
+    # get_spearman(allresults,model_ranks)
 
-
-
-
-
+    rfile = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm/results_safety_tulu-2-7b-fg.json"
+    plot_jb_categories(rfile)
 

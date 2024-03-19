@@ -60,7 +60,7 @@ def run_safety(
 
     jailbreak_res, toxicity_res, exaggerated_res, misuse_res = None, None, None, None
 
-    if os.path.isfile(jailbreak_path):
+    if jailbreak_path:
         jailbreak_data = file_process.load_json(jailbreak_path)
         eval_data, jailbreak_res = evaluator.jailbreak_eval(
             jailbreak_data, eval_type=jailbreak_eval_type, return_data=True
@@ -68,11 +68,11 @@ def run_safety(
         if toxicity_eval and toxicity_path is None:
             toxicity_res = evaluator.toxicity_eval(eval_data)
 
-    if os.path.isfile(exaggerated_safety_path):
+    if exaggerated_safety_path:
         exaggerated_data = file_process.load_json(exaggerated_safety_path)
         exaggerated_res = evaluator.exaggerated_eval(exaggerated_data)
 
-    if os.path.isfile(misuse_path):
+    if misuse_path:
         misuse_data = file_process.load_json(misuse_path)
         misuse_res = evaluator.misuse_eval(misuse_data)
 
@@ -322,15 +322,16 @@ if __name__ == "__main__":
     if args.safety_dir:
         print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
-            jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),  
-            exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
-            misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
+            # jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),
+            jailbreak_path="/net/nfs.cirrascale/mosaic/allysone/safety/OE-Safety/generation_results/olmo-7b-instruct/safety/jailbreak.json",  
+            # exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
+            # misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
             # toxicity_eval=True,  
             # toxicity_path=os.path.join(args.safety_dir,"toxicity",args.filename),  
-            jailbreak_eval_type="total"  
+            jailbreak_eval_type="single"  
         ) 
         print(safety_results)
-        file_process.save_json(safety_results,os.path.join(args.output_dir,f'results_safety_{file_basename}.json'))
+        file_process.save_json(safety_results,os.path.join(args.output_dir,f'results_safety_{file_basename}-fg.json'))
     if args.fairness_dir:
         print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
