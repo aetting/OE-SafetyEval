@@ -148,11 +148,11 @@ def run_privacy(
         None,
     )
 
-    if os.path.isfile(privacy_confAIde_path):
+    if privacy_confAIde_path:
         privacy_confAIde_data = file_process.load_json(privacy_confAIde_path)
         privacy_confAIde_res = evaluator.ConfAIDe_eval(privacy_confAIde_data)
 
-    if os.path.isfile(privacy_awareness_query_path):
+    if privacy_awareness_query_path:
         privacy_awareness_query_data = file_process.load_json(
             privacy_awareness_query_path
         )
@@ -163,7 +163,7 @@ def run_privacy(
             privacy_awareness_query_data, type="aug"
         )
 
-    if os.path.isfile(privacy_leakage_path):
+    if privacy_leakage_path:
         privacy_leakage_data = file_process.load_json(privacy_leakage_path)
         privacy_leakage_res = evaluator.leakage_eval(privacy_leakage_data)
 
@@ -359,8 +359,8 @@ if __name__ == "__main__":
             # privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
-        print(privacy_results)
-        file_process.save_json(privacy_results,os.path.join(args.output_dir,f'results_privacy_{file_basename}.json'))
+        # print(privacy_results)
+        file_process.save_json(privacy_results,os.path.join(args.output_dir,f'results_privacy_{file_basename}-lkbd.json'))
     if args.ethics_dir:
         print("\nEVALUATING ETHICS\n")
         ethics_results = run_ethics(  
