@@ -2,6 +2,7 @@ import os
 import json
 import scipy
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 models = [
@@ -146,12 +147,41 @@ def get_spearman(allresults,model_ranks):
     for item in sorted_rho:
         print(item)
     
-def plot_jb_categories(input_file):
-    with open(input_file) as f:
-        results = json.load(f)
-    df = pd.DataFrame(results)
+def plot_jb_categories(models,filetitle):
+    all_jb = {}
+    for model in models:
+        rfile = f"/Users/allysone/Desktop/research/tulu-eval/result_files/results_safety_{model}-fg.json"
+        with open(rfile) as f:
+            results = json.load(f)
+        all_jb[model] = results['jailbreak_res']
+    df = pd.DataFrame(all_jb)
+    # rowname_remap = {e:e[:6] for e in df.index.tolist()}
+    remap = {
+        "fixed sentence": "fixed",
+        "no_punctuation": "nopunc",
+        "programming": "prog",
+        "Refusal sentence prohibition": "refproh",
+        "scenario": "scen",
+        "multitask": "multi",
+        "no_long_word": "nolong",
+        "url_encode": "url",
+        "without_the": "no_the",
+        "json_format": "json",
+        "leetspeak": "leet",
+        "bad words": "badwrds",
+    }
+    df = df.rename(index=remap)
     print(df)
-    # df.plot()
+    dfplot = df.plot(kind='bar',subplots=True,rot=45,legend=False,fontsize=8)
+    # fig = dfplot.figure()
+    for ax in dfplot:
+        ax.set_title(label=ax.title.get_text(),size=8)
+    plt.subplots_adjust(hspace=.5)
+    fig = plt.gcf()
+    # fig.tight_layout()
+    # fig.suptitle("Jailbreak performance breakdown")
+    fig.savefig(f"/Users/allysone/Desktop/research/tulu-eval/result_files/{filetitle}.png")
+    # plt.show()
     
 
 
@@ -160,6 +190,6 @@ if __name__ == "__main__":
     # model_winrates, model_ranks = get_ranks(allresults)
     # get_spearman(allresults,model_ranks)
 
-    rfile = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm/results_safety_tulu-2-7b-fg.json"
-    plot_jb_categories(rfile)
+    rfile = "/Users/allysone/Desktop/research/tulu-eval/result_files/results_safety_tulu-2-7b-fg.json"
+    plot_jb_categories(models_13b,"13b_jb_breakdown")
 

@@ -322,16 +322,15 @@ if __name__ == "__main__":
     if args.safety_dir:
         print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
-            # jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),
-            jailbreak_path="/net/nfs.cirrascale/mosaic/allysone/safety/OE-Safety/generation_results/olmo-7b-instruct/safety/jailbreak.json",  
-            # exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
-            # misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
+            jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),
+            exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
+            misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
             # toxicity_eval=True,  
             # toxicity_path=os.path.join(args.safety_dir,"toxicity",args.filename),  
             jailbreak_eval_type="single"  
         ) 
         print(safety_results)
-        file_process.save_json(safety_results,os.path.join(args.output_dir,f'results_safety_{file_basename}-fg.json'))
+        file_process.save_json(safety_results,os.path.join(args.output_dir,f'results_safety_{file_basename}.json'))
     if args.fairness_dir:
         print("\nEVALUATING FAIRNESS\n")
         fairness_results = run_fairness(
@@ -356,8 +355,8 @@ if __name__ == "__main__":
     if args.privacy_dir:
         print("\nEVALUATING PRIVACY\n")
         privacy_results = run_privacy(  
-            privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde",args.filename) ,  
-            privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
+            # privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde",args.filename) ,  
+            # privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
         print(privacy_results)
