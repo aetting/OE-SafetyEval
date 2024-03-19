@@ -355,12 +355,12 @@ if __name__ == "__main__":
     if args.privacy_dir:
         print("\nEVALUATING PRIVACY\n")
         privacy_results = run_privacy(  
-            # privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde",args.filename) ,  
-            # privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
+            privacy_confAIde_path=os.path.join(args.privacy_dir,"privacy_awareness_confAIde",args.filename) ,  
+            privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
         # print(privacy_results)
-        file_process.save_json(privacy_results,os.path.join(args.output_dir,f'results_privacy_{file_basename}-lkbd.json'))
+        file_process.save_json(privacy_results,os.path.join(args.output_dir,f'results_privacy_{file_basename}.json'))
     if args.ethics_dir:
         print("\nEVALUATING ETHICS\n")
         ethics_results = run_ethics(  

@@ -10,9 +10,10 @@
 # done
 
 result_dir=/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs
-# for FILE in tulu-2-dpo-7b.json tulu-2-13b.json tulu-2-dpo-13b.json tulu-2-70b.json tulu-2-dpo-70b.json; do
-for FILE in Llama-2-13b-chat-hf.json Llama-2-7b-chat-hf.json Llama-2-70b-chat-hf.json Mistral-7B-Instruct-v0.2.json Mixtral-8x7B-Instruct-v0.1.json; do
+# for FILE in tulu-2-7b.json tulu-2-dpo-7b.json tulu-2-13b.json tulu-2-dpo-13b.json tulu-2-70b.json tulu-2-dpo-70b.json; do
+# for FILE in Llama-2-13b-chat-hf.json Llama-2-7b-chat-hf.json Llama-2-70b-chat-hf.json Mistral-7B-Instruct-v0.2.json Mixtral-8x7B-Instruct-v0.1.json; do
 # for FILE in olmo-7b-instruct.json; do
+for FILE in tulu-2-7b.json; do
     echo $FILE
     python evaluation/trustllm/pipeline.py \
         --filename $FILE \
