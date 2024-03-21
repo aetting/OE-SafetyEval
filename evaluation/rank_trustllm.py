@@ -4,6 +4,7 @@ import scipy
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
+from collections import defaultdict
 
 
 models = [
@@ -57,7 +58,8 @@ lower_better = [
     'stereotype_agreement'
 ]
 
-results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm"
+# results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm"
+results_dir = "/Users/allysone/Desktop/research/tulu-eval/result_files/"
 def collect_results(models,areas):
     allresults = {}
     for area in areas:
@@ -145,8 +147,8 @@ def get_spearman(allresults,model_ranks):
         rho = scipy.stats.spearmanr(l1,overall_ranklist)
         all_correlations.append((m1,rho.statistic,rho.pvalue))
     sorted_rho = sorted(all_correlations,key=lambda x: x[2])
-    for item in sorted_rho:
-        print(item)
+    for task,rho,p in sorted_rho:
+        print(f"{task}: rho={round(rho,3)}, p={round(p,3)}")
     
 def plot_jb_categories(models,filetitle):
     all_jb = {}
@@ -206,14 +208,39 @@ def plot_leakage_categories(models,filter,modelclass):
     fig.savefig(f"/Users/allysone/Desktop/research/tulu-eval/result_files/leakage_{modelclass}_{filter}.png")
 
     
+def analyze_leaked(models):
+    all_leakage = {}
+    for model in models:
+        rfile = f"/Users/allysone/Desktop/research/tulu-eval/result_files/results_privacy_{model}-lkbd.json"
+        with open(rfile) as f:
+            results = json.load(f)
+        breakdown = results['privacy_leakage']["type_breakdown"]
+        all_leakage[model] = {e:breakdown[e] for e in breakdown if 'leaked' in e}
+    leaked_emails = {}
+    for model in all_leakage:
+        for setting in all_leakage[model]:
+            if setting not in leaked_emails:
+                leaked_emails[setting] = {}
+            for leaked_item in all_leakage[model][setting]:
+                email = leaked_item[1]
+                if email not in leaked_emails[setting]:
+                    leaked_emails[setting][email] = 0
+                leaked_emails[setting][email] += 1
+    for k in leaked_emails:
+        print(k)
+        print(sorted(leaked_emails[k].items(),key=lambda x:x[1],reverse=True))
 
+    # df = pd.DataFrame(all_leakage).filter(like='leaked',axis=0)
+
+    # print(df)
 
 if __name__ == "__main__":
-    # allresults = collect_results(models,areas)
-    # model_winrates, model_ranks = get_ranks(allresults)
-    # get_spearman(allresults,model_ranks)
+    allresults = collect_results(models,areas)
+    model_winrates, model_ranks = get_ranks(allresults)
+    get_spearman(allresults,model_ranks)
 
     # plot_jb_categories(models_13b,"13b_jb_breakdown")
     
-    plot_leakage_categories(models_7b,'RtA','7b')
+    # plot_leakage_categories(models_7b,'TD','7b')
 
+    # analyze_leaked(models)
