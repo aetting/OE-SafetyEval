@@ -14,12 +14,12 @@ models = [
     "tulu-2-dpo-13b",
     "tulu-2-70b",
     "tulu-2-dpo-70b",
-    "Llama-2-70b-chat-hf",
+    "olmo-7b-instruct",
     "Llama-2-7b-chat-hf",
     "Llama-2-13b-chat-hf",
-    "olmo-7b-instruct",
+    "Llama-2-70b-chat-hf",
+    "Mistral-7B-Instruct-v0.2",
     "Mixtral-8x7B-Instruct-v0.1",
-    "Mistral-7B-Instruct-v0.2"
     ]
 
 models_7b = [
@@ -53,7 +53,7 @@ areas = [
 lower_better = [
     'privacy_leakage_TD',
     'privacy_leakage_CD',
-    'exaggerated_safety_res',
+    # 'exaggerated_safety_res',
     'sycophancy_preference',
     'stereotype_agreement'
 ]
@@ -80,6 +80,56 @@ def collect_results(models,areas):
                             allresults[area][metname] = []
                         allresults[area][metname].append((model,areaDict[metric][submetric]))
     return allresults
+
+def plot_all(allresults):
+    allplot_dict = {}
+    for area in allresults:
+        allplot_dict[area] = {}
+        for metric in allresults[area]:
+            allplot_dict[area][metric] = {}
+            for model,value in allresults[area][metric]:
+                allplot_dict[area][metric][model] = value
+    omit_metrics = [
+        "preference_overall"
+    ]
+    for area in ["truthfulness"]:
+        if area == "truthfulness":
+            allplot_dict[area] = {e:allplot_dict[area][e] for e in allplot_dict[area] if "misin" not in e}
+        df = pd.DataFrame(allplot_dict[area])
+        if area == "fairness":
+            df = df.drop("preference_overall",axis=1)
+        elif area == "truthfulness":
+            filter = "other"
+            # df = df.filter(like=["hall","syc","advfact"],axis=1)
+        print(df)
+        remap = {
+        "tulu-2-7b": "tulu-7b",
+        "tulu-2-dpo-7b": "tulu-7b-d",
+        "tulu-2-13b": "tulu-13b",
+        "tulu-2-dpo-13b": "tulu-13b-d",
+        "tulu-2-70b": "tulu-70b",
+        "tulu-2-dpo-70b": "tulu-70b-d",
+        "olmo-7b-instruct": "olmo-7b",
+        "Llama-2-70b-chat-hf": "llama-70b",
+        "Llama-2-7b-chat-hf": "llama-7b",
+        "Llama-2-13b-chat-hf": "llama-13b",
+        "Mistral-7B-Instruct-v0.2": "mistral-7b",
+        "Mixtral-8x7B-Instruct-v0.1": "mixtral",
+        }
+        df = df.rename(index=remap)
+        print(df)
+        dfplot = df.plot(kind='bar',subplots=True,rot=35,legend=False,fontsize=8)
+        for ax in dfplot:
+            ax.set_title(label=ax.title.get_text(),size=8)
+        plt.subplots_adjust(hspace=.8)
+        fig = plt.gcf()
+        # fig.tight_layout()
+        if area == "truthfulness":
+            figtitle = f"/Users/allysone/Desktop/research/tulu-eval/result_files/allmodels_{area}_{filter}.png"
+        else:
+            figtitle = f"/Users/allysone/Desktop/research/tulu-eval/result_files/allmodels_{area}.png"
+        fig.savefig(figtitle)
+
 
 def increment_winrate(model_winrates,winning_model,metric):
     if winning_model not in model_winrates:
@@ -236,8 +286,9 @@ def analyze_leaked(models):
 
 if __name__ == "__main__":
     allresults = collect_results(models,areas)
-    model_winrates, model_ranks = get_ranks(allresults)
-    get_spearman(allresults,model_ranks)
+    plot_all(allresults)
+    # model_winrates, model_ranks = get_ranks(allresults)
+    # get_spearman(allresults,model_ranks)
 
     # plot_jb_categories(models_13b,"13b_jb_breakdown")
     
