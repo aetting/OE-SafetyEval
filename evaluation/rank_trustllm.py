@@ -286,9 +286,9 @@ def analyze_leaked(models):
 
 if __name__ == "__main__":
     allresults = collect_results(models,areas)
-    plot_all(allresults)
-    # model_winrates, model_ranks = get_ranks(allresults)
-    # get_spearman(allresults,model_ranks)
+    # plot_all(allresults)
+    model_winrates, model_ranks = get_ranks(allresults)
+    get_spearman(allresults,model_ranks)
 
     # plot_jb_categories(models_13b,"13b_jb_breakdown")
     
