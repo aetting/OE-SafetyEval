@@ -1,8 +1,9 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import torch.nn.functional as F
-import os, re, csv
+import os, re, csv, json
 import numpy as np
+import pandas as pd
 
 # with torch.no_grad():
 #     outputs_1 = model(input_ids_1, labels=input_ids_1)
@@ -45,6 +46,34 @@ def get_seq_probs(seqs,tokenizer,model):
     return(all_probs)
 
     # input_ids = tokenizer([sequence_1,sequence_2], return_tensors='pt',padding=True).input_ids
+
+def run_test(itemlist,model,tokenizer):
+    corr = 0
+    for item in itemlist:
+        assert item['corr'] in item['choices']
+        label = 0 if item['choices'][0] == item['corr'] else 1
+        seq1 = item['sent'] + f" '{item['pron']. capitalize()}' refers to the {item['choices'][0]}"
+        if item['choices'][1] == "someone":
+            seq2 = item['sent'] + f" '{item['pron'].capitalize()}' refers to the {item['choices'][1]}"
+        else:
+            seq2 = item['sent'] + f" '{item['pron'].capitalize()}' refers to the {item['choices'][1]}"
+        probs = get_seq_probs([seq1,seq2],tokenizer,model)
+        if np.argmax(probs) == label: 
+            corr += 1
+        else:
+            print(seq1)
+            print(seq2)
+            print(probs)
+    acc = corr / len(itemlist)
+    return acc
+
+def run_ster_and_anti(ster_list,anti_list,model,tokenizer):
+    print("PRO STEREOTYPE\n")
+    ster_acc = run_test(ster_list,model,tokenizer)
+    print("\n\nANTI STEREOTYPE\n")
+    anti_acc = run_test(anti_list,model,tokenizer)
+    print(ster_acc)
+    print(anti_acc)
 
 def load_winogender():
     filedir = "/net/nfs.cirrascale/mosaic/allysone/safety/datasets/Winogender"
@@ -111,45 +140,22 @@ def load_winobias():
     
     return lists
 
-def run_test(itemlist,model,tokenizer):
-    corr = 0
-    for item in itemlist:
-        assert item['corr'] in item['choices']
-        label = 0 if item['choices'][0] == item['corr'] else 1
-        seq1 = item['sent'] + f" '{item['pron']. capitalize()}' refers to the {item['choices'][0]}"
-        if item['choices'][1] == "someone":
-            seq2 = item['sent'] + f" '{item['pron'].capitalize()}' refers to the {item['choices'][1]}"
-        else:
-            seq2 = item['sent'] + f" '{item['pron'].capitalize()}' refers to the {item['choices'][1]}"
-        probs = get_seq_probs([seq1,seq2],tokenizer,model)
-        if np.argmax(probs) == label: 
-            corr += 1
-    acc = corr / len(itemlist)
-    return acc
 
 if __name__ == "__main__":
-    tokenizer = AutoTokenizer.from_pretrained('allenai/tulu-2-dpo-7b', padding_side="left")
-    # tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained('allenai/tulu-2-dpo-7b',device_map="auto", torch_dtype=torch.bfloat16)
+    # tokenizer = AutoTokenizer.from_pretrained('allenai/tulu-2-dpo-7b', padding_side="left")
+    # # tokenizer.pad_token = tokenizer.eos_token
+    # model = AutoModelForCausalLM.from_pretrained('allenai/tulu-2-dpo-7b',device_map="auto", torch_dtype=torch.bfloat16)
     
     # winobias_lists = load_winobias()
 
-    # ster_acc = run_test(winobias_lists["pro_stereotyped_type1"][:20],model,tokenizer)
-    # anti_acc = run_test(winobias_lists["anti_stereotyped_type1"][:20],model,tokenizer)
-    # print(ster_acc)
-    # print(anti_acc)
-    # print()
+    # run_ster_and_anti(winobias_lists["pro_stereotyped_type1"][:20],winobias_lists["anti_stereotyped_type1"][:20],model,tokenizer)
 
-    # ster_acc = run_test(winobias_lists["pro_stereotyped_type2"][:20],model,tokenizer)
-    # anti_acc = run_test(winobias_lists["anti_stereotyped_type2"][:20],model,tokenizer)
-    # print(ster_acc)
-    # print(anti_acc)
-    # print()
+    # run_ster_and_anti(winobias_lists["pro_stereotyped_type2"][:20],winobias_lists["anti_stereotyped_type2"][:20],model,tokenizer)
 
-    winogender_lists = load_winogender()
+    # winogender_lists = load_winogender()
 
-    ster_acc = run_test(winogender_lists["pro_stereotype"][:100],model,tokenizer)
-    anti_acc = run_test(winogender_lists["anti_stereotype"][:100],model,tokenizer)
-    print(ster_acc)
-    print(anti_acc)
+    # run_ster_and_anti(winogender_lists["pro_stereotype"],winogender_lists["anti_stereotype"],model,tokenizer)
+
+    load_bbq()
+
 
