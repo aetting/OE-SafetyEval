@@ -101,7 +101,8 @@ def build_prompt(item):
     main_prompt = f"{item['context']}\n\nQuestion: {item['question']}\nA. {item['ans0']}\nB. {item['ans1']}\nC. {item['ans2']}"
     for q,a in demos: 
         full_prompt += f"\n\n{q}\n\nAnswer: {a}"
-    full_prompt += f"\n\n{main_prompt}\n\nAnswer:"
+    # full_prompt += f"\n\n{main_prompt}\n\nAnswer:"
+    full_prompt += f"\n\nNow here is my question:\n\n{main_prompt}\n\n"
     return full_prompt
 
 def get_bbq_generations(args):
