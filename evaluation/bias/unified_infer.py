@@ -16,17 +16,17 @@ from fastchat.model import get_conversation_template
 def parse_args():
     parser = argparse.ArgumentParser() 
     parser.add_argument('--engine', default="vllm", type=str)
-    parser.add_argument('--output_folder', default="./result_dirs/wild_bench/", type=str)
+    parser.add_argument('--output_folder', default="/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/bbq", type=str)
     parser.add_argument('--download_dir', default=None, type=str)    
     parser.add_argument('--model_name', default=None, type=str)
-    parser.add_argument('--model_pretty_name', default=None, type=str)
+    # parser.add_argument('--model_pretty_name', default=None, type=str)
     parser.add_argument('--tokenizer_name', default="auto", type=str)
     parser.add_argument('--tensor_parallel_size', type=int, default=1)
     parser.add_argument('--dtype', type=str, default="auto")
     parser.add_argument('--tokenizer_mode', type=str, default="auto") 
-    parser.add_argument('--data_name', default=None, type=str)
-    parser.add_argument('--prompt_field', default="prompt", type=str)
-    parser.add_argument('--data_file', default=None, type=str)  
+    # parser.add_argument('--data_name', default=None, type=str)
+    # parser.add_argument('--prompt_field', default="prompt", type=str)
+    # parser.add_argument('--data_file', default=None, type=str)  
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--num_outputs', default=1, type=int)
     parser.add_argument('--top_p',default=1, type=float)
@@ -35,24 +35,23 @@ def parse_args():
     parser.add_argument('--max_tokens',default=7500, type=int)
     parser.add_argument('--start_index',default=0, type=int) # 0 means from the beginning of the list
     parser.add_argument('--end_index',default=-1, type=int) # -1 means to the end of the list 
-    parser.add_argument('--filepath',default="auto", type=str)  
-    parser.add_argument('--overwrite', action='store_true')
+    # parser.add_argument('--filepath',default="auto", type=str)  
+    # parser.add_argument('--overwrite', action='store_true')
     parser.add_argument('--no_repeat_ngram_size', default=0, type=int)
     parser.add_argument('--hf_bf16', action='store_true')
     parser.add_argument('--hf_gptq', action='store_true')
     parser.add_argument('--hold_run', action='store_true')
+    parser.add_argument('--generation', action='store_true')
+    parser.add_argument('--scoring', action='store_true')
 
-    # only for MT-bench 
-    parser.add_argument('--mt_turn', default=-1, type=int)
-    parser.add_argument('--mt_turn1_result', default=None, type=str) 
     return parser.parse_args()
 
 
 
-def sanitize_args(args):
-    if args.download_dir == "default":
-        args.download_dir = None
-    return args
+# def sanitize_args(args):
+#     if args.download_dir == "default":
+#         args.download_dir = None
+#     return args
 
 def prompt2conversation(prompt, tokenizer,modelname):
         # FIXME (@wade3han) this is just a quick fix...
@@ -68,9 +67,10 @@ def prompt2conversation(prompt, tokenizer,modelname):
             conversation = conv.get_prompt()
             return conversation
 
-def run_inference(model_inputs,args):
+def run_inference(model_inputs,item_list,args):
     # Load the model
     print("loading model!")
+    modelname = args.model_name.split('/')[-1]
     if args.tokenizer_name == "auto":
         args.tokenizer_name = args.model_name
     if args.engine == "vllm":
@@ -144,8 +144,13 @@ def run_inference(model_inputs,args):
                                          stop=stop_words, stop_token_ids=stop_token_ids, include_stop_str_in_output=include_stop_str_in_output, n=args.num_outputs)
         for cur_id in tqdm(range(0, len(todo_inputs), args.batch_size), desc=f"Generating {args.model_name} from {args.start_index} to {args.end_index}"):
             batch_inputs = todo_inputs[cur_id:cur_id+args.batch_size]
+            batch_items = item_list[cur_id:cur_id+args.batch_size]
             batch_outputs = llm.generate(batch_inputs, sampling_params, use_tqdm=False)
-            outputs.extend([[o.text for o in x.outputs] for x in batch_outputs]) # TODO: enbale multiple generation 
+            for item,output in zip(batch_items,[[o.text for o in x.outputs][0] for x in batch_outputs]):
+                item["res"] = output
+            outputs.extend(batch_items) # TODO: enbale multiple generation 
+            with open(os.path.join(args.output_folder,f"{modelname}.json"), "w") as f:
+                json.dump(outputs, f, indent=2)
         #     save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
         # save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
         
