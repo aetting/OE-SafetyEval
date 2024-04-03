@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import torch.nn.functional as F
-import os, re, csv, json
+import os, re, csv, json, argparse
 import numpy as np
 import pandas as pd
 
@@ -60,20 +60,25 @@ def run_test(itemlist,model,tokenizer):
         probs = get_seq_probs([seq1,seq2],tokenizer,model)
         if np.argmax(probs) == label: 
             corr += 1
-        else:
-            print(seq1)
-            print(seq2)
-            print(probs)
+        # else:
+        #     print(seq1)
+        #     print(seq2)
+        #     print(probs)
     acc = corr / len(itemlist)
     return acc
 
 def run_ster_and_anti(ster_list,anti_list,model,tokenizer):
-    print("PRO STEREOTYPE\n")
+    # print("PRO STEREOTYPE\n")
     ster_acc = run_test(ster_list,model,tokenizer)
-    print("\n\nANTI STEREOTYPE\n")
+    # print("\n\nANTI STEREOTYPE\n")
     anti_acc = run_test(anti_list,model,tokenizer)
-    print(ster_acc)
-    print(anti_acc)
+    # print(ster_acc)
+    # print(anti_acc)
+    
+    bias_score = round(ster_acc - anti_acc,3)
+    # print(bias_score)
+
+    return bias_score
 
 def load_winogender():
     filedir = "/net/nfs.cirrascale/mosaic/allysone/safety/datasets/Winogender"
@@ -142,20 +147,27 @@ def load_winobias():
 
 
 if __name__ == "__main__":
-    # tokenizer = AutoTokenizer.from_pretrained('allenai/tulu-2-dpo-7b', padding_side="left")
-    # # tokenizer.pad_token = tokenizer.eos_token
-    # model = AutoModelForCausalLM.from_pretrained('allenai/tulu-2-dpo-7b',device_map="auto", torch_dtype=torch.bfloat16)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_name', default=None, type=str)
+    args = parser.parse_args()
+
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name, padding_side="left",trust_remote_code=True)
+    # tokenizer.pad_token = tokenizer.eos_token
+    model = AutoModelForCausalLM.from_pretrained(args.model_name,device_map="auto", torch_dtype="auto")
+    print(args.model_name)
     
-    # winobias_lists = load_winobias()
+    winobias_lists = load_winobias()
 
-    # run_ster_and_anti(winobias_lists["pro_stereotyped_type1"][:20],winobias_lists["anti_stereotyped_type1"][:20],model,tokenizer)
+    type1_score = run_ster_and_anti(winobias_lists["pro_stereotyped_type1"],winobias_lists["anti_stereotyped_type1"],model,tokenizer)
 
-    # run_ster_and_anti(winobias_lists["pro_stereotyped_type2"][:20],winobias_lists["anti_stereotyped_type2"][:20],model,tokenizer)
+    type2_score = run_ster_and_anti(winobias_lists["pro_stereotyped_type2"],winobias_lists["anti_stereotyped_type2"],model,tokenizer)
 
-    # winogender_lists = load_winogender()
+    print(type1_score)
+    print(type2_score)
 
-    # run_ster_and_anti(winogender_lists["pro_stereotype"],winogender_lists["anti_stereotype"],model,tokenizer)
+    winogender_lists = load_winogender()
 
-    load_bbq()
-
+    wgender_score = run_ster_and_anti(winogender_lists["pro_stereotype"],winogender_lists["anti_stereotype"],model,tokenizer)
+    print(wgender_score)
 
