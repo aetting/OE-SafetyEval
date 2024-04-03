@@ -145,7 +145,7 @@ def run_inference(model_inputs,item_list,args):
                                          stop=stop_words, stop_token_ids=stop_token_ids, include_stop_str_in_output=include_stop_str_in_output, n=args.num_outputs)
         for cur_id in tqdm(range(0, len(todo_inputs), args.batch_size), desc=f"Generating {args.model_name} from {args.start_index} to {args.end_index}"):
             batch_inputs = todo_inputs[cur_id:cur_id+args.batch_size]
-            print(batch_inputs[0])
+            # print(batch_inputs[0])
             batch_items = item_list[cur_id:cur_id+args.batch_size]
             batch_outputs = llm.generate(batch_inputs, sampling_params, use_tqdm=False)
             for item,output in zip(batch_items,[[o.text for o in x.outputs][0] for x in batch_outputs]):
