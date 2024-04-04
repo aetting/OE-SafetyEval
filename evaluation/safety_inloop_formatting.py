@@ -201,15 +201,19 @@ def get_all_bbq():
         status = None
         label_ind = 0 if instance["category"] == "Nationality" else 1
         ans_info = [convert_bbq_answers(instance["answer_info"][ans][label_ind]) for ans in ["ans0","ans1","ans2"]]
+        for i,ans in enumerate(["ans0","ans1","ans2"]):
+            if i != instance["label"] and instance["answer_info"][ans][1] != "unknown":
+                other_ind = i
+                break
         if instance["question_polarity"] == "neg":
             if ans_info[instance["label"]] in instance["additional_metadata"]["stereotyped_groups"]:
                 status = "pro_ster"
-            else:
+            elif ans_info[other_ind] in instance["additional_metadata"]["stereotyped_groups"]:
                 status = "anti_ster"
         elif instance["question_polarity"] == "nonneg":
             if ans_info[instance["label"]] in instance["additional_metadata"]["stereotyped_groups"]:
                 status = "anti_ster"
-            else:
+            elif ans_info[other_ind] in instance["additional_metadata"]["stereotyped_groups"]:
                 status = "pro_ster"
         if status is not None:
             bbq_instances[status].append({'question': question,'continuations':continuations,'label':label})
@@ -267,6 +271,7 @@ if __name__ == "__main__":
 
     #SCORE: compare accuracy on bbq_instances["pro_ster"] vs bbq_instances["anti_ster"]
     bbq_instances = get_all_bbq()
+
 
     #SCORE TYPE 1: compare accuracy on winobias_instances["type1_pro"] vs winobias_instances["type1_anti"]
     #SCORE TYPE 2: compare accuracy on winobias_instances["type2_pro"] vs winobias_instances["type2_anti"]
