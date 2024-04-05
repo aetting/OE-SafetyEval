@@ -37,8 +37,9 @@ class SafetyEval:
             assert all('label' in d for d in data), "All data items must have a 'label' key."
 
             res_dict = {}
+            # import pdb; pdb.set_trace()
             for d in data:
-                label = d['label']
+                label = d['label'][0]
                 res_dict.setdefault(label, []).append(d)
 
             rta_dict = {}

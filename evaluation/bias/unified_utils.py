@@ -11,7 +11,7 @@ from tenacity import (
  
 from datasets import load_dataset
 from tqdm import tqdm
-from fastchat_conversation import map_to_conv
+# from fastchat_conversation import map_to_conv
 import json   
 
 def apply_template(chat_history, model_name):

@@ -60,7 +60,7 @@ def run_safety(
 
     jailbreak_res, toxicity_res, exaggerated_res, misuse_res = None, None, None, None
 
-    if os.path.isfile(jailbreak_path):
+    if jailbreak_path:
         jailbreak_data = file_process.load_json(jailbreak_path)
         eval_data, jailbreak_res = evaluator.jailbreak_eval(
             jailbreak_data, eval_type=jailbreak_eval_type, return_data=True
@@ -68,11 +68,11 @@ def run_safety(
         if toxicity_eval and toxicity_path is None:
             toxicity_res = evaluator.toxicity_eval(eval_data)
 
-    if os.path.isfile(exaggerated_safety_path):
+    if exaggerated_safety_path:
         exaggerated_data = file_process.load_json(exaggerated_safety_path)
         exaggerated_res = evaluator.exaggerated_eval(exaggerated_data)
 
-    if os.path.isfile(misuse_path):
+    if misuse_path:
         misuse_data = file_process.load_json(misuse_path)
         misuse_res = evaluator.misuse_eval(misuse_data)
 
@@ -148,11 +148,11 @@ def run_privacy(
         None,
     )
 
-    if os.path.isfile(privacy_confAIde_path):
+    if privacy_confAIde_path:
         privacy_confAIde_data = file_process.load_json(privacy_confAIde_path)
         privacy_confAIde_res = evaluator.ConfAIDe_eval(privacy_confAIde_data)
 
-    if os.path.isfile(privacy_awareness_query_path):
+    if privacy_awareness_query_path:
         privacy_awareness_query_data = file_process.load_json(
             privacy_awareness_query_path
         )
@@ -163,7 +163,7 @@ def run_privacy(
             privacy_awareness_query_data, type="aug"
         )
 
-    if os.path.isfile(privacy_leakage_path):
+    if privacy_leakage_path:
         privacy_leakage_data = file_process.load_json(privacy_leakage_path)
         privacy_leakage_res = evaluator.leakage_eval(privacy_leakage_data)
 
@@ -322,12 +322,12 @@ if __name__ == "__main__":
     if args.safety_dir:
         print("\nEVALUATING SAFETY\n")
         safety_results = run_safety(  
-            jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),  
+            jailbreak_path=os.path.join(args.safety_dir,"jailbreak",args.filename),
             exaggerated_safety_path=os.path.join(args.safety_dir,"exaggerated_safety",args.filename),  
             misuse_path=os.path.join(args.safety_dir,"misuse",args.filename),  
             # toxicity_eval=True,  
             # toxicity_path=os.path.join(args.safety_dir,"toxicity",args.filename),  
-            jailbreak_eval_type="total"  
+            jailbreak_eval_type="single"  
         ) 
         print(safety_results)
         file_process.save_json(safety_results,os.path.join(args.output_dir,f'results_safety_{file_basename}.json'))
@@ -359,7 +359,7 @@ if __name__ == "__main__":
             privacy_awareness_query_path=os.path.join(args.privacy_dir,"privacy_awareness_query",args.filename) ,  
             privacy_leakage_path=os.path.join(args.privacy_dir,"privacy_leakage",args.filename) 
         ) 
-        print(privacy_results)
+        # print(privacy_results)
         file_process.save_json(privacy_results,os.path.join(args.output_dir,f'results_privacy_{file_basename}.json'))
     if args.ethics_dir:
         print("\nEVALUATING ETHICS\n")
