@@ -72,13 +72,15 @@ def run_ster_and_anti(ster_list,anti_list,model,tokenizer):
     ster_acc = run_test(ster_list,model,tokenizer)
     # print("\n\nANTI STEREOTYPE\n")
     anti_acc = run_test(anti_list,model,tokenizer)
-    # print(ster_acc)
-    # print(anti_acc)
+    print(ster_acc)
+    print(anti_acc)
     
-    bias_score = round(ster_acc - anti_acc,3)
-    # print(bias_score)
+    bias_diff = round(ster_acc - anti_acc,3)
+    bias_ratio = round(anti_acc / ster_acc,3)
+    print(bias_diff)
+    print(bias_ratio)
 
-    return bias_score
+    return bias_diff, bias_ratio
 
 def load_winogender():
     filedir = "/net/nfs.cirrascale/mosaic/allysone/safety/datasets/Winogender"
@@ -150,24 +152,33 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', default=None, type=str)
+    parser.add_argument('--output_path', default=None, type=str)
     args = parser.parse_args()
+
+    results = {"winobias": 
+                {"type1":{}, "type2":{}},
+                "winogender":{}
+                }
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, padding_side="left",trust_remote_code=True)
     # tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(args.model_name,device_map="auto", torch_dtype="auto")
-    print(args.model_name)
+    model_pretty_name = args.model_name.split("/")[-1]
     
     winobias_lists = load_winobias()
 
-    type1_score = run_ster_and_anti(winobias_lists["pro_stereotyped_type1"],winobias_lists["anti_stereotyped_type1"],model,tokenizer)
+    type1_diff,type1_ratio = run_ster_and_anti(winobias_lists["pro_stereotyped_type1"],winobias_lists["anti_stereotyped_type1"],model,tokenizer)
 
-    type2_score = run_ster_and_anti(winobias_lists["pro_stereotyped_type2"],winobias_lists["anti_stereotyped_type2"],model,tokenizer)
+    type2_diff,type2_ratio = run_ster_and_anti(winobias_lists["pro_stereotyped_type2"],winobias_lists["anti_stereotyped_type2"],model,tokenizer)
 
-    print(type1_score)
-    print(type2_score)
+    results["winobias"]["type1"]["ratio"],results["winobias"]["type1"]["diff"] = type1_ratio,type1_diff
+    results["winobias"]["type2"]["ratio"],results["winobias"]["type2"]["diff"] = type2_ratio,type2_diff
 
     winogender_lists = load_winogender()
 
-    wgender_score = run_ster_and_anti(winogender_lists["pro_stereotype"],winogender_lists["anti_stereotype"],model,tokenizer)
-    print(wgender_score)
+    wgender_diff,wgender_ratio = run_ster_and_anti(winogender_lists["pro_stereotype"],winogender_lists["anti_stereotype"],model,tokenizer)
+    results["winogender"]["ratio"],results["winogender"]["diff"] = wgender_ratio,wgender_diff
+
+    with open(os.path.join(args.output_path,f"{model_pretty_name}.json"),"w") as f:
+        json.dump(results,f,indent=2)
 
