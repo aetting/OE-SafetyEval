@@ -58,14 +58,15 @@ lower_better = [
     'stereotype_agreement'
 ]
 
-# results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/trustllm"
-results_dir = "/Users/allysone/Desktop/research/tulu-eval/result_files/"
+results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/"
+# results_dir = "/Users/allysone/Desktop/research/tulu-eval/result_files/"
 def collect_results(models,areas):
     allresults = {}
-    for area in areas:
-        allresults[area] = {}
-        for model in models:
-            filename = os.path.join(results_dir,f'results_{area}_{model}.json')
+    for model in models:
+        for area in areas:
+            if area not in allresults:
+                allresults[area] = {}
+            filename = os.path.join(results_dir,f'trustllm/results_{area}_{model}.json')
             with open(filename) as f:
                 areaDict = json.load(f)
             for metric in areaDict:
@@ -79,6 +80,27 @@ def collect_results(models,areas):
                         if metname not in allresults[area]:
                             allresults[area][metname] = []
                         allresults[area][metname].append((model,areaDict[metric][submetric]))
+        filename = os.path.join(results_dir,f'wino/{model}.json')
+        with open(filename) as f:
+            biasdict = json.load(f)
+        if "bias" not in allresults:
+            allresults["bias"] = {}
+        # import pdb; pdb.set_trace()
+        for dataset in biasdict:
+            for k in biasdict[dataset]:
+                if type(biasdict[dataset][k]) == float:
+                    metric = f"{dataset}_{k}"
+                    if metric not in allresults["bias"]:
+                        allresults["bias"][metric] = []
+                    allresults["bias"][metric].append((model,biasdict[dataset][k]))
+                elif type(biasdict[dataset][k]) == dict:
+                    for k2 in biasdict[dataset][k]:
+                        metric = f"{dataset}_{k}_{k2}"
+                        if metric not in allresults["bias"]:
+                            allresults["bias"][metric] = []
+                        allresults["bias"][metric].append((model,biasdict[dataset][k][k2]))
+
+    import pdb; pdb.set_trace()
     return allresults
 
 def plot_all(allresults):
@@ -285,10 +307,11 @@ def analyze_leaked(models):
     # print(df)
 
 if __name__ == "__main__":
-    allresults = collect_results(models,areas)
+    allresults = collect_results(models_7b,areas)
     # plot_all(allresults)
-    model_winrates, model_ranks = get_ranks(allresults)
-    get_spearman(allresults,model_ranks)
+
+    # model_winrates, model_ranks = get_ranks(allresults)
+    # get_spearman(allresults,model_ranks)
 
     # plot_jb_categories(models_13b,"13b_jb_breakdown")
     

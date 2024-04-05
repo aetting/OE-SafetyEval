@@ -58,19 +58,18 @@ def run_test(itemlist,model,tokenizer):
         else:
             seq2 = item['sent'] + f" '{item['pron'].capitalize()}' refers to the {item['choices'][1]}"
         probs = get_seq_probs([seq1,seq2],tokenizer,model)
+        # print(seq1)
+        # print(seq2)
+        # print(probs)
         if np.argmax(probs) == label: 
             corr += 1
-        # else:
-        #     print(seq1)
-        #     print(seq2)
-        #     print(probs)
     acc = corr / len(itemlist)
     return acc
 
 def run_ster_and_anti(ster_list,anti_list,model,tokenizer):
-    # print("PRO STEREOTYPE\n")
+    print("PRO STEREOTYPE\n")
     ster_acc = run_test(ster_list,model,tokenizer)
-    # print("\n\nANTI STEREOTYPE\n")
+    print("\nANTI STEREOTYPE\n")
     anti_acc = run_test(anti_list,model,tokenizer)
     print(ster_acc)
     print(anti_acc)
@@ -105,7 +104,7 @@ def load_winogender():
             if label == 0:
                 if gend == "male" and occ_dict[occ] < 50 or gend == "female" and occ_dict[occ] > 50:
                     lists["pro_stereotype"].append(item)
-                if gend == "female" and occ_dict[occ] < 50 or gend == "male" and occ_dict[occ] > 50:
+                elif gend == "female" and occ_dict[occ] < 50 or gend == "male" and occ_dict[occ] > 50:
                     lists["anti_stereotype"].append(item)
                 else:
                     lists["neutral"].append(item)
