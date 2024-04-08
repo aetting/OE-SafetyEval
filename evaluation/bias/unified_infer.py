@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument('--output_folder', default="/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/bbq", type=str)
     parser.add_argument('--download_dir', default=None, type=str)    
     parser.add_argument('--model_name', default=None, type=str)
-    # parser.add_argument('--model_pretty_name', default=None, type=str)
+    parser.add_argument('--model_pretty_name', default=None, type=str)
     parser.add_argument('--tokenizer_name', default="auto", type=str)
     parser.add_argument('--tensor_parallel_size', type=int, default=1)
     parser.add_argument('--dtype', type=str, default="auto")

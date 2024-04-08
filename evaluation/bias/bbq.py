@@ -141,8 +141,7 @@ def categorize_item(item):
     return corr, status
 
 def get_scores(args):
-    modelname = args.model_name.split('/')[-1]
-    with open(os.path.join(args.output_folder,f"{modelname}.json")) as f:
+    with open(os.path.join(args.output_folder,f"{args.model_pretty_name}.json")) as f:
         item_list = json.load(f)
     total = 0
     correct = 0
@@ -154,6 +153,9 @@ def get_scores(args):
     anti_total = 0
     for i,item in enumerate(item_list):
         corr,question_status = categorize_item(item)
+        # print(item)
+        # print(question_status)
+        # print(corr)
         if question_status is not None:
             total += 1
             correct += corr
@@ -172,6 +174,7 @@ def get_scores(args):
                 # print(f"biased: {bias}")
                 # print(f"stereotype-reinforcing: {ster}")
 
+    resdict = {}
     acc = correct / total
     # bias_rate = biased / total
     # bias_score = (2*bias_rate)-1
@@ -183,8 +186,15 @@ def get_scores(args):
     # print(f"bias score: {bias_score}")
     print(f"ster_acc: {ster_acc}; anti_acc: {anti_acc}")
     print(f"acc ratio: {anti_acc/ster_acc}")
-    print(ster_total)
-    print(anti_total)
+    resdict["ratio"] = anti_acc/ster_acc
+    resdict["diff"] = ster_acc - anti_acc
+    print(ster_acc)
+    print(anti_acc)
+    print(anti_acc/ster_acc)
+    print(ster_acc - anti_acc)
+    with open(os.path.join(args.output_folder,f"results_{args.model_pretty_name}.json"),"w") as f:
+        json.dump(resdict,f,indent=2)
+
 
 if __name__ == "__main__":
     args = parse_args()

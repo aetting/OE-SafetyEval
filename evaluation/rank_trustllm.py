@@ -55,7 +55,11 @@ lower_better = [
     'privacy_leakage_CD',
     # 'exaggerated_safety_res',
     'sycophancy_preference',
-    'stereotype_agreement'
+    'stereotype_agreement',
+    'winobias_type2_diff',
+    'winobias_type1_diff',
+    'winogender_diff',
+    'bbq_diff'
 ]
 
 results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/"
@@ -63,6 +67,8 @@ results_dir = "/net/nfs.cirrascale/mosaic/allysone/safety/eval-repo/result_dirs/
 def collect_results(models,areas):
     allresults = {}
     for model in models:
+        
+        #add trustllm
         for area in areas:
             if area not in allresults:
                 allresults[area] = {}
@@ -80,6 +86,8 @@ def collect_results(models,areas):
                         if metname not in allresults[area]:
                             allresults[area][metname] = []
                         allresults[area][metname].append((model,areaDict[metric][submetric]))
+        
+        #add wino
         filename = os.path.join(results_dir,f'wino/{model}.json')
         with open(filename) as f:
             biasdict = json.load(f)
@@ -99,8 +107,14 @@ def collect_results(models,areas):
                         if metric not in allresults["bias"]:
                             allresults["bias"][metric] = []
                         allresults["bias"][metric].append((model,biasdict[dataset][k][k2]))
+        filename = os.path.join(results_dir,f'bbq/results_{model}.json')
+        with open(filename) as f:
+            biasdict = json.load(f)
+            for k in biasdict:
+                if f"bbq_{k}" not in allresults["bias"]:
+                    allresults["bias"][f"bbq_{k}"] = []
+                allresults["bias"][f"bbq_{k}"].append((model,biasdict[k]))
 
-    import pdb; pdb.set_trace()
     return allresults
 
 def plot_all(allresults):
@@ -307,11 +321,11 @@ def analyze_leaked(models):
     # print(df)
 
 if __name__ == "__main__":
-    allresults = collect_results(models_7b,areas)
+    allresults = collect_results(models,areas)
     # plot_all(allresults)
 
-    # model_winrates, model_ranks = get_ranks(allresults)
-    # get_spearman(allresults,model_ranks)
+    model_winrates, model_ranks = get_ranks(allresults)
+    get_spearman(allresults,model_ranks)
 
     # plot_jb_categories(models_13b,"13b_jb_breakdown")
     
