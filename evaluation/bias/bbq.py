@@ -22,7 +22,7 @@ def load_bbq():
             for i,line in enumerate(f):
                 # if i > 10: break
                 item = json.loads(line)
-                if item["context_condition"] == "disambig":
+                if item["context_condition"] == "ambig":
                     ster = item["additional_metadata"]["stereotyped_groups"]
                     label_ind = 0 if cat == "Nationality" else 1
                     corr = [item[ans] for ans in ["ans0","ans1","ans2"]][item["label"]]

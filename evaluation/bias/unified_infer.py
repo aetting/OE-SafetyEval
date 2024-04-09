@@ -151,7 +151,7 @@ def run_inference(model_inputs,item_list,args):
             for item,output in zip(batch_items,[[o.text for o in x.outputs][0] for x in batch_outputs]):
                 item["res"] = output
             outputs.extend(batch_items) # TODO: enbale multiple generation 
-            with open(os.path.join(args.output_folder,f"{modelname}.json"), "w") as f:
+            with open(os.path.join(args.output_folder,f"{modelname}-ambig.json"), "w") as f:
                 json.dump(outputs, f, indent=2)
         #     save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
         # save_outputs(args, id_strs, outputs, chat_history, metadata, model_inputs, filepath)
