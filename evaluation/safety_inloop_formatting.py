@@ -159,7 +159,7 @@ def access_bbq():
     ]
     category_datasets = []
     for cat in categories:
-        cat_dat = load_dataset("heegyu/bbq",split="test",name=cat).filter(lambda example: example["context_condition"] == "disambig")
+        cat_dat = load_dataset("heegyu/bbq",split="test",name=cat)
         category_datasets.append(cat_dat)
     bbq = concatenate_datasets(category_datasets)
     return bbq
@@ -197,10 +197,29 @@ def instance_conversion_bbq(instance):
    
     return question, continuations, label
 
+def instance_conversion_bbq_ambig(instance):
+    question = f"Context: {instance['context']}\n\nQuestion: {instance['question']}\n\nAnswer: "
+    label_ind = 0 if instance["category"] == "Nationality" else 1
+    ans_info = [convert_bbq_answers(instance["answer_info"][ans][label_ind]) for ans in ["ans0","ans1","ans2"]]
+    label = None
+    for i,a in enumerate(ans_info):
+        if a == "unknown":
+            continue
+        elif a in instance["additional_metadata"]["stereotyped_groups"]:
+            if instance["question_polarity"] == "neg":
+                label = i
+        else:
+            if instance["question_polarity"] == "nonneg":
+                label = i
+    continuations = [instance[ans] for ans in ["ans0","ans1","ans2"]]
+   
+    return question, continuations, label
+
 def get_all_bbq():
-    bbq_instances = {"pro_ster":[],"anti_ster":[]}
-    bbq = access_bbq()
-    for instance in bbq:
+    bbq_instances = {"pro_ster":[],"anti_ster":[],"ambig":[]}
+    bbq_disambig = access_bbq().filter(lambda example: example["context_condition"] == "disambig")
+    bbq_ambig = access_bbq().filter(lambda example: example["context_condition"] == "ambig")
+    for instance in bbq_disambig:
         question, continuations, label = instance_conversion_bbq(instance)
         status = None
         label_ind = 0 if instance["category"] == "Nationality" else 1
@@ -221,6 +240,9 @@ def get_all_bbq():
                 status = "pro_ster"
         if status is not None:
             bbq_instances[status].append({'question': question,'continuations':continuations,'label':label})
+    for instance in bbq_ambig:
+        question, continuations, label = instance_conversion_bbq_ambig(instance)
+        bbq_instances["ambig"].append({'question': question,'continuations':continuations,'label':label})
     return bbq_instances 
 
 ####################
@@ -333,6 +355,7 @@ if __name__ == "__main__":
 
         # SCORE: compare accuracy on bbq_instances["pro_ster"] vs bbq_instances["anti_ster"]
         bbq_instances = get_all_bbq()
+        import pdb; pdb.set_trace()
 
         # SCORE TYPE 1: compare accuracy on winobias_instances["type1_pro"] vs winobias_instances["type1_anti"]
         # SCORE TYPE 2: compare accuracy on winobias_instances["type2_pro"] vs winobias_instances["type2_anti"]
